@@ -1,0 +1,1699 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>전국 둘레길 백과사전</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* 종이 바탕 + 보석빛 자연색 */
+  --bg:#F7F5EF; --card:#FFFFFF; --paper:#F1EDE3; --ink:#15233A; --ink2:#4A5670; --line:#E2DCCD;
+  --forest:#0F6B4A; --teal:#0E8C9A; --sea:#1767C7; --sunset:#F2643A; --gold:#E8A21C; --indigo:#3B3BB3; --magenta:#D6336C;
+  --accent:#0F6B4A; --accent-ink:#FFFFFF; --wrong:#C8463A; --mark:#B5361F;
+  --tint-forest:#E3F1EA; --tint-sea:#E3EEFB; --tint-gold:#FBF0D9; --tint-sunset:#FCE7DF; --tint-indigo:#E8E8F8;
+  --shadow:0 1px 2px rgba(21,35,58,.06),0 14px 34px -10px rgba(21,35,58,.22);
+  --shadow-sm:0 1px 2px rgba(21,35,58,.08),0 6px 14px -6px rgba(21,35,58,.16);
+  --r:18px; --r-sm:12px;
+  --serif:"Nanum Myeongjo",serif; --sans:"Noto Sans KR",system-ui,sans-serif;
+}
+
+:root[data-theme="dark"]{
+  --bg:#0D1424; --card:#17213A; --paper:#1C2745; --ink:#F2F4FA; --ink2:#B9C2D8; --line:#2B3759;
+  --accent:#2FBF85; --accent-ink:#0D1424; --wrong:#FF7A66; --mark:#FF9A7A;
+  --tint-forest:#14322A; --tint-sea:#152A4A; --tint-gold:#3A2F15; --tint-sunset:#3D2219; --tint-indigo:#22224A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 34px -10px rgba(0,0,0,.6);
+  --shadow-sm:0 1px 2px rgba(0,0,0,.3),0 6px 14px -6px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:18px;line-height:1.75;overflow-x:hidden;word-break:keep-all;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--serif);font-weight:800;letter-spacing:-.01em;line-height:1.3}
+h4{font-family:var(--sans);font-weight:700}
+.wrap{max-width:1160px;margin:0 auto;padding:0 16px}
+button{font-family:var(--sans);font-weight:700;cursor:pointer;border:0}
+.ico{display:inline-flex;width:1.15em;height:1.15em;vertical-align:-.2em;flex:none}
+.ico svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+/* 위쪽 산책 진행 막대 */
+.walker{position:fixed;top:0;left:0;right:0;height:48px;z-index:50;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.walker .track{position:absolute;left:16px;right:130px;top:26px;height:4px;border-radius:4px;background:var(--line)}
+.walker .done{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:linear-gradient(90deg,var(--forest),var(--teal),var(--gold),var(--sunset))}
+.walker .me{position:absolute;top:-9px;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:var(--card);border:3px solid var(--sunset);box-shadow:var(--shadow-sm)}
+.walker .flag{position:absolute;right:-4px;top:-10px;color:var(--ink2)}
+.walker .stamps{position:absolute;right:12px;top:9px;font-size:15px;font-weight:700;background:var(--ink);color:var(--bg);padding:3px 12px;border-radius:999px;display:flex;gap:6px;align-items:center}
+
+/* 첫 화면: 오로라 하늘 */
+.hero{position:relative;overflow:hidden;padding:84px 0 40px;color:#fff;
+  background:radial-gradient(55% 50% at 12% 18%,rgba(242,100,58,.75),transparent 62%),radial-gradient(50% 45% at 88% 12%,rgba(214,51,108,.6),transparent 60%),radial-gradient(70% 60% at 50% 95%,rgba(14,140,154,.75),transparent 65%),linear-gradient(165deg,#2A2E8C 0%,#1767C7 55%,#0E8C9A 100%)}
+.hero .wrap{position:relative;z-index:2}
+.hero .ridge{position:absolute;left:0;right:0;bottom:0;width:100%;height:30vh;min-height:180px;z-index:1;will-change:transform}
+.hero .kicker{display:inline-flex;gap:8px;align-items:center;font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#FFE3A3;margin:0}
+.hero h1{font-size:clamp(34px,5.6vw,64px);margin:8px 0 10px;color:#fff;text-shadow:0 2px 24px rgba(10,15,50,.35)}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,#FFD36E,#FF9A6A);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{margin:0;font-size:clamp(17px,2vw,20px);color:rgba(255,255,255,.92);max-width:36em}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 26px}
+.stats span{display:inline-flex;gap:8px;align-items:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(6px);padding:7px 16px;border-radius:999px;font-weight:700;font-size:16px}
+.stats b{font-family:var(--serif);font-size:22px;color:#FFD36E}
+.film{position:relative;border-radius:var(--r);overflow:hidden;box-shadow:0 30px 60px -20px rgba(5,10,40,.6),0 0 0 1px rgba(255,255,255,.18);background:#1B2150;aspect-ratio:16/9}
+.film canvas{display:block;width:100%;height:100%;cursor:pointer}
+.film .big{position:absolute;inset:0;background:transparent}
+.film.playing .big{display:none}
+.ctrl{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.ctrl .pill{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.35)}
+.ctrl .pill.on{background:#fff;color:#15233A;border-color:#fff}
+.ctrl .time{margin-left:auto;font-weight:500;color:rgba(255,255,255,.9);font-size:16px}
+.cue{display:flex;justify-content:center;align-items:center;gap:8px;margin:26px auto 0;width:max-content;color:#fff;text-decoration:none;font-weight:700;padding:10px 20px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);animation:nudge 2.4s ease-in-out infinite}
+.film.ended~.cue{background:#fff;color:#15233A}
+@keyframes nudge{50%{transform:translateY(5px)}}
+
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--card);color:var(--ink);padding:10px 18px;border-radius:999px;border:1px solid var(--line);font-size:16px;transition:transform .15s,background .15s;text-decoration:none}
+.pill:hover{transform:translateY(-1px)}
+.pill:active{transform:translateY(1px)}
+.pill.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+nav.chips{position:sticky;top:48px;z-index:40;padding:10px 0;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav.chips .wrap{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav.chips a{flex:none;text-decoration:none;color:var(--ink);font-weight:500;padding:6px 14px;border-radius:999px;font-size:16px;border:1px solid transparent}
+nav.chips a:hover{border-color:var(--line);background:var(--card)}
+nav.chips a small{color:var(--mark);font-weight:700;margin-right:4px}
+
+section{padding:88px 0}
+.sec-h{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;align-items:center;margin-bottom:26px}
+.sec-h .ic{grid-row:span 2;width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font-size:28px;color:#fff;box-shadow:var(--shadow-sm)}
+.leg{display:block;font-size:15px;font-weight:700;letter-spacing:.14em;color:var(--mark);font-family:var(--sans)}
+.sec-h h2{font-size:clamp(28px,3.8vw,42px);margin:0}
+.sec-h p{margin:0;color:var(--ink2);font-size:17px;grid-column:2}
+.guide{display:flex;gap:12px;align-items:flex-start;margin:-6px 0 26px;padding:14px 18px;border-radius:var(--r-sm);background:var(--tint-gold);border-left:4px solid var(--gold);font-size:17px;max-width:44em}
+.guide .ico{color:var(--gold);margin-top:3px}
+.clay{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:26px;border:1px solid var(--line)}
+
+/* 대장님 */
+.cap{display:grid;grid-template-columns:300px 1fr;gap:30px;align-items:center}
+.cap .avatar{border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);position:relative}
+.cap .avatar svg{display:block;width:100%;height:auto}
+.cap .avatar figcaption{position:absolute;left:0;right:0;bottom:0;padding:12px 16px;color:#fff;font-weight:700;font-size:16px;background:linear-gradient(transparent,rgba(10,14,40,.75))}
+.cap ul{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+.cap li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.cap li .n{flex:none;font-family:var(--serif);font-size:22px;color:var(--mark);width:28px;line-height:1.4}
+.peaks{display:flex;gap:5px;flex-wrap:wrap;margin-top:16px}
+.peaks span{width:32px;height:32px;border-radius:8px;background:linear-gradient(160deg,var(--indigo),var(--sea));color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700;animation:rise .5s backwards}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}}
+.lesson{margin:18px 0 0;padding:16px 18px;border-radius:var(--r-sm);background:var(--tint-forest);border-left:4px solid var(--forest)}
+.note{font-size:16px;color:var(--ink2);margin-top:14px}
+
+/* 둘레길이란 */
+.what{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+.point{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--line)}
+.point .ico{width:40px;height:40px;padding:9px;border-radius:12px;color:#fff;flex:none}
+.point b{color:var(--mark)}
+.iso-hill{position:relative;height:340px;perspective:900px}
+.iso-hill .plate{position:absolute;inset:30px;transform:rotateX(58deg) rotateZ(-38deg);transform-style:preserve-3d}
+.iso-hill .ground{position:absolute;inset:0;border-radius:36px;background:linear-gradient(135deg,#3FB27F,#0F6B4A);box-shadow:0 26px 0 #0A4A33,0 40px 50px rgba(0,0,0,.25)}
+.iso-hill .mount{position:absolute;left:30%;top:30%;width:40%;height:40%;border-radius:50%;background:radial-gradient(circle at 35% 35%,#B9F0CF,#1F8A5C 70%);transform:translateZ(40px);box-shadow:0 0 0 14px rgba(255,255,255,.12)}
+.iso-hill .ring{position:absolute;left:14%;top:14%;width:72%;height:72%;border-radius:50%;border:5px dashed var(--gold)}
+.iso-hill .orbit{position:absolute;left:14%;top:14%;width:72%;height:72%;animation:spin 14s linear infinite}
+.iso-hill .hiker{position:absolute;left:-11px;top:calc(50% - 11px);width:22px;height:22px;border-radius:50%;background:var(--sunset);border:4px solid #fff;box-shadow:0 0 0 6px rgba(242,100,58,.3)}
+.iso-hill .tag2{position:absolute;font-weight:700;font-size:16px;background:var(--card);color:var(--ink);padding:6px 12px;border-radius:10px;box-shadow:var(--shadow-sm)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* 3D 지도 */
+.mapzone{display:grid;grid-template-columns:1.25fr 1fr;gap:26px;align-items:start}
+.stage{position:relative;height:640px;perspective:1300px;border-radius:var(--r);background:radial-gradient(circle at 50% 35%,#5CC6F5,#1767C7 62%,#0B3F86);box-shadow:var(--shadow);overflow:hidden}
+.stage .sea{position:absolute;inset:0;background:repeating-radial-gradient(circle at 50% 45%,rgba(255,255,255,.08) 0 1px,transparent 1px 28px)}
+#pins{position:absolute;inset:0;transform-style:preserve-3d}
+.board{position:absolute;left:50%;top:50%;width:640px;height:700px;margin:-370px 0 0 -320px;transform-style:preserve-3d;transform:rotateX(52deg) rotateZ(-22deg);transition:transform .25s ease-out}
+.board svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.pin{position:absolute;transform-style:preserve-3d;transform:translate(-50%,-50%);cursor:pointer}
+.pin .pole{position:absolute;left:50%;bottom:0;width:4px;margin-left:-2px;height:46px;background:rgba(255,255,255,.85);transform-origin:bottom;transform:rotateX(-90deg);border-radius:2px}
+.pin .head{position:absolute;left:50%;bottom:0;transform:translate(-50%,0) rotateZ(22deg) rotateX(-52deg) translateY(-46px);transform-origin:bottom center;white-space:nowrap;display:flex;flex-direction:column;align-items:center}
+.pin .ball{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:20px;background:#fff;box-shadow:0 0 0 4px var(--c),0 8px 16px rgba(0,0,0,.3);transition:transform .2s}
+.pin .lbl{font-weight:700;font-size:15px;background:#fff;color:#15233A;padding:2px 10px;border-radius:8px;margin-top:6px;box-shadow:0 4px 10px rgba(0,0,0,.2)}
+.pin:hover .ball,.pin.sel .ball{transform:scale(1.2) translateY(-6px)}
+.pin.sel .lbl{background:#15233A;color:#fff}
+.pin .shadow{position:absolute;left:-12px;top:-7px;width:24px;height:14px;border-radius:50%;background:rgba(0,0,0,.25)}
+.pin.rest .ball{width:32px;height:32px;font-size:16px;border-radius:9px;box-shadow:0 0 0 3px #3B4660,0 8px 16px rgba(0,0,0,.3)}
+.pin.rest .pole{height:30px}
+.pin.rest .head{transform:translate(-50%,0) rotateZ(22deg) rotateX(-52deg) translateY(-30px)}
+.pin.rest .lbl{background:#3B4660;color:#fff}
+.stage .hint{position:absolute;left:14px;bottom:14px;font-weight:700;font-size:15px;background:rgba(255,255,255,.95);color:#15233A;padding:6px 12px;border-radius:10px}
+.maptoggle{position:absolute;right:14px;top:14px;display:flex;gap:6px;z-index:2}
+.maptoggle .pill{font-size:15px;padding:6px 12px;background:rgba(255,255,255,.95);color:#15233A;border-color:transparent}
+.maptoggle .pill.on{background:#15233A;color:#fff}
+.stage.no-rest .pin.rest,.stage.no-trail .pin:not(.rest){display:none}
+.detail{min-height:320px}
+.detail .kicker{font-size:15px;font-weight:700;letter-spacing:.1em;color:var(--mark)}
+.detail p{max-width:36em}
+.tag{display:inline-block;font-size:15px;font-weight:700;padding:3px 10px;border-radius:999px;margin:2px 4px 2px 0;border:1px solid var(--line);color:var(--ink2)}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:16px 0;background:var(--line);border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--line)}
+.stat div{background:var(--card);padding:12px 8px;text-align:center}
+.stat b{display:block;font-family:var(--serif);font-size:21px}
+.stat small{color:var(--ink2);font-size:15px}
+.diff{font-size:16px;color:var(--ink2)}
+.dots{letter-spacing:2px;color:var(--sunset)}
+.dots i{font-style:normal;color:var(--line)}
+
+/* 카드 */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px;perspective:1000px}
+.tcard{position:relative;border-radius:var(--r);overflow:hidden;background:var(--card);box-shadow:var(--shadow);border:1px solid var(--line);transform-style:preserve-3d;transition:transform .2s ease-out,box-shadow .2s;cursor:pointer}
+.tcard:hover{box-shadow:0 2px 4px rgba(21,35,58,.08),0 24px 44px -14px rgba(21,35,58,.35)}
+.tcard .scene{height:170px;position:relative;overflow:hidden}
+.tcard .body{padding:18px 20px 20px}
+.tcard h3{margin:0;font-size:24px}
+.tcard p{margin:4px 0 10px;font-size:16px;color:var(--ink2)}
+.tcard .num{position:absolute;left:16px;top:14px;font-family:var(--serif);font-size:30px;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.35)}
+.tcard .em{position:absolute;right:16px;top:142px;width:52px;height:52px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:24px;box-shadow:0 0 0 4px var(--c),var(--shadow-sm);transform:translateZ(40px)}
+.tcard .got{position:absolute;right:14px;top:14px;font-weight:700;font-size:15px;background:var(--gold);color:#15233A;padding:3px 12px;border-radius:999px;display:none}
+.tcard.stamped .got{display:inline-flex;gap:6px;align-items:center}
+
+/* 풍경 그림 */
+.scn{position:absolute;inset:0}
+.scn svg{display:block;width:100%;height:100%}
+
+/* 걸어 보기 창 */
+dialog.walk{border:0;padding:0;border-radius:22px;width:min(900px,96vw);max-height:94vh;background:var(--card);color:var(--ink);box-shadow:0 40px 80px -20px rgba(0,0,0,.5)}
+dialog.walk::backdrop{background:rgba(10,16,36,.6);backdrop-filter:blur(4px)}
+.walk .top{position:relative;height:270px;overflow:hidden}
+.walk .top .scn{transition:transform .9s cubic-bezier(.4,0,.2,1)}
+.walk .top .hiker2{position:absolute;bottom:22px;left:8%;width:26px;height:26px;border-radius:50%;background:var(--sunset);border:5px solid #fff;box-shadow:0 0 0 8px rgba(242,100,58,.35),0 8px 18px rgba(0,0,0,.3);transition:left .9s cubic-bezier(.4,0,.2,1)}
+.walk .x{position:absolute;right:14px;top:14px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.95);color:#15233A;font-size:20px;z-index:3}
+.walk .title{position:absolute;left:18px;top:16px;font-family:var(--serif);font-weight:800;font-size:26px;color:#15233A;background:rgba(255,255,255,.92);padding:4px 16px;border-radius:12px;z-index:2}
+.walk .steps{display:flex;gap:6px;justify-content:center;padding:16px 0 0}
+.walk .steps i{width:44px;height:6px;border-radius:3px;background:var(--line)}
+.walk .steps i.on{background:var(--accent)}
+.walk .content{padding:16px 28px 8px;min-height:230px;overflow:auto;max-height:calc(94vh - 410px)}
+.walk .content h3{font-size:26px;margin:4px 0 10px;display:flex;gap:10px;align-items:center}
+.walk .content h3 .ico{color:var(--mark)}
+.walk .content p{max-width:36em}
+.walk .content ul{padding-left:0;list-style:none;display:grid;gap:0}
+.walk .content li{padding:12px 0;border-bottom:1px solid var(--line);display:flex;gap:10px}
+.walk .content li .ico{color:var(--gold);margin-top:4px}
+.seeg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.seeg div{background:var(--paper);border-radius:var(--r-sm);padding:18px 12px;text-align:center;font-weight:700;font-size:18px;animation:rise .4s backwards}
+.seeg div .ico{display:block;margin:0 auto 6px;color:var(--teal);width:26px;height:26px}
+.walk .nav{display:flex;justify-content:space-between;padding:12px 24px 24px;gap:10px}
+.seal{width:120px;height:120px;margin:10px auto 0;border-radius:50%;display:grid;place-items:center;border:4px double var(--mark);color:var(--mark);font-family:var(--serif);font-weight:800;font-size:18px;text-align:center;line-height:1.25;transform:rotate(-6deg);animation:seal .5s cubic-bezier(.2,.7,.2,1)}
+@keyframes seal{from{transform:scale(1.3) rotate(-6deg);opacity:0}}
+.bubble{background:var(--paper);border-radius:var(--r-sm);padding:14px 18px;border-left:4px solid var(--teal)}
+
+/* 휴게소 */
+.road{position:relative;height:150px;border-radius:var(--r);background:linear-gradient(#2E9E6A 0 22%,#3A4458 22% 78%,#2E9E6A 78%);box-shadow:var(--shadow);overflow:hidden;margin-bottom:22px}
+.road .lane{position:absolute;left:0;right:0;top:calc(50% - 2px);height:4px;background:repeating-linear-gradient(90deg,#FFD36E 0 40px,transparent 40px 70px)}
+.road .car{position:absolute;width:64px;height:28px;border-radius:10px 14px 6px 6px;animation:drive 7s linear infinite}
+.road .car:before,.road .car:after{content:"";position:absolute;bottom:-7px;width:14px;height:14px;border-radius:50%;background:#15233A;border:3px solid #9AA6BF}
+.road .car:before{left:8px}.road .car:after{right:8px}
+.road .car i{position:absolute;top:5px;right:8px;width:18px;height:10px;border-radius:3px;background:rgba(255,255,255,.75)}
+.road .c1{top:22%;background:var(--sunset);animation-duration:6s}
+.road .c2{top:24%;width:96px;height:34px;background:var(--gold);animation-delay:-3s;animation-duration:9s}
+.road .c3{top:58%;background:var(--sea);animation-delay:-1.5s;animation-duration:5s}
+@keyframes drive{from{left:-14%}to{left:108%}}
+.road .stop{position:absolute;right:6%;top:0;font-weight:700;font-size:15px;background:#fff;color:#15233A;padding:3px 14px 5px;border-radius:0 0 12px 12px;display:flex;gap:6px;align-items:center}
+.rcard{cursor:default}
+.rcard .top{height:120px;display:grid;place-items:center;font-size:52px;position:relative}
+.rcard .top small{position:absolute;left:12px;top:10px;font-weight:700;font-size:15px;background:rgba(255,255,255,.95);color:#15233A;padding:2px 10px;border-radius:8px}
+.rcard .yum{display:flex;gap:8px;align-items:flex-start;background:var(--paper);border-radius:var(--r-sm);padding:10px 12px;font-size:16px;margin:10px 0}
+.rcard .yum .ico{color:var(--sunset);margin-top:3px}
+.rcard .near{font-size:16px;color:var(--ink2)}
+
+/* 약속, 퀴즈, 낱말 */
+.tips{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.tips .clay{padding:22px}
+.tips .e{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:24px;background:var(--tint-forest)}
+.tips h4{margin:12px 0 4px;font-size:20px}
+.tips p{margin:0;font-size:17px;color:var(--ink2)}
+.quiz{max-width:780px;margin:0 auto;text-align:center}
+.quiz .q{font-family:var(--serif);font-weight:800;font-size:clamp(22px,3vw,28px);margin:10px 0 20px;line-height:1.45}
+.quiz .opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.quiz .opts button{background:var(--paper);color:var(--ink);border-radius:var(--r-sm);padding:16px;font-size:18px;font-weight:500;border:1px solid var(--line);text-align:left}
+.quiz .opts button:hover{border-color:var(--ink2)}
+.quiz .opts button.ok{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.quiz .opts button.no{background:var(--wrong);color:#fff;border-color:var(--wrong)}
+.quiz .exp{min-height:56px;margin-top:16px;color:var(--ink2)}
+.quiz .score{font-weight:700;color:var(--ink2);font-size:16px}
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.flip{height:150px;perspective:800px;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{position:absolute;inset:0;border-radius:var(--r);display:grid;place-items:center;text-align:center;padding:16px;backface-visibility:hidden;box-shadow:var(--shadow)}
+.flip .f{background:linear-gradient(150deg,var(--indigo),var(--sea));font-family:var(--serif);font-weight:800;font-size:28px;color:#fff}
+.flip .b{background:var(--card);transform:rotateY(180deg);font-size:17px;border:1px solid var(--line)}
+
+/* 도착: 수료증 */
+.cert{max-width:760px;margin:0 auto;text-align:center;position:relative;background:var(--card);border-radius:var(--r);padding:44px 30px;box-shadow:var(--shadow);border:1px solid var(--line);outline:2px solid var(--gold);outline-offset:-14px}
+.cert h2{font-size:clamp(28px,4vw,40px);margin:6px 0 10px}
+.cert .big{font-family:var(--serif);font-size:64px;color:var(--mark);line-height:1}
+.cert p{max-width:32em;margin:12px auto}
+
+footer{padding:40px 0 70px;text-align:center;color:var(--ink2);font-size:16px;border-top:1px solid var(--line)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+.bgm{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:999px;box-shadow:var(--shadow);font-size:16px;transition:transform .15s}
+.bgm:hover{transform:translateY(-2px)}
+.bgm .eq{display:inline-flex;gap:3px;align-items:flex-end;height:16px}
+.bgm .eq i{width:3px;height:5px;border-radius:2px;background:currentColor}
+.bgm.on{background:var(--accent);color:var(--accent-ink)}
+.bgm.on .eq i{animation:eq .5s ease-in-out infinite alternate}
+.bgm.on .eq i:nth-child(2){animation-delay:-.2s}.bgm.on .eq i:nth-child(3){animation-delay:-.35s}
+@keyframes eq{to{height:16px}}
+
+@media (max-width:860px){
+  .cap,.what,.mapzone{grid-template-columns:1fr}
+  .cap .avatar{max-width:340px}
+  .stage{height:520px}
+  .board{transform:rotateX(50deg) rotateZ(-22deg) scale(.6)}
+  .quiz .opts{grid-template-columns:1fr}
+  section{padding:64px 0}
+  body{font-size:17px}
+  .ctrl .time{margin-left:0;width:100%}
+}
+
+/* ===== 2차 검토 반영 ===== */
+:root{--wrong-ink:#FFFFFF}
+
+:root[data-theme="dark"]{--wrong-ink:#0D1424;--forest:#2FBF85;--teal:#22C3D0;--sea:#4C9BFF;--sunset:#FF7A52;--gold:#FFC23D;--indigo:#7B7BFF;--magenta:#FF5C93}
+.quiz .opts button.no{color:var(--wrong-ink)}
+
+/* 첫 화면: 넓은 화면에서는 제목과 영상을 나란히 */
+.hero{padding:64px 0 36px;background:radial-gradient(40% 35% at 70% 70%,rgba(232,162,28,.45),transparent 60%),radial-gradient(55% 50% at 12% 18%,rgba(242,100,58,.75),transparent 62%),radial-gradient(50% 45% at 88% 12%,rgba(214,51,108,.6),transparent 60%),radial-gradient(70% 60% at 50% 95%,rgba(14,140,154,.75),transparent 65%),linear-gradient(165deg,#2A2E8C 0%,#1767C7 55%,#0E8C9A 100%)}
+.hero::before{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(rgba(10,15,40,.35),rgba(10,15,40,.05) 60%)}
+@media (min-width:1024px){
+  .hero .wrap{display:grid;grid-template-columns:5fr 7fr;gap:8px 44px;align-items:center}
+  .hero .kicker,.hero h1,.hero .sub,.stats{grid-column:1}
+  .hero .film{grid-column:2;grid-row:1/span 4}
+  .hero .ctrl,.hero .cue{grid-column:2}
+  .hero h1{font-size:clamp(36px,3.8vw,54px)}
+  .stats{margin-bottom:0}
+}
+@media (max-width:600px){.hero h1{font-size:clamp(30px,8vw,40px)}}
+.film .big:focus-visible{outline:3px solid #FFD36E;outline-offset:-6px;border-radius:inherit}
+.film:not(.playing) .big::after{content:"";position:absolute;left:50%;top:69%;width:104px;height:104px;margin:-52px;border-radius:50%;border:2px solid #fff;animation:ring 2.2s ease-out infinite;pointer-events:none}
+@keyframes ring{from{transform:scale(.9);opacity:.8}to{transform:scale(1.5);opacity:0}}
+.cue{animation-iteration-count:3}
+
+/* 글씨 */
+.peaks span{width:36px;height:36px;font-size:16px}
+.leg{font-size:16px;letter-spacing:.06em}
+.detail .kicker{font-size:16px;letter-spacing:.04em}
+.hero .kicker{letter-spacing:.06em}
+
+/* 덜 장난감 같게 */
+.pill,nav.chips a,.stats span,.cue,.tcard .got{border-radius:8px}
+.tag{border:0;padding:0 12px 0 0;font-weight:500;font-size:16px}
+.tag:before{content:"· ";color:var(--mark)}
+.iso-hill .orbit{animation:spin 40s ease-in-out infinite}
+.iso-hill .ground{border-radius:18px;box-shadow:0 2px 0 #0A4A33,0 30px 60px -20px rgba(10,40,30,.45)}
+.iso-hill .ring{border:1.5px dashed rgba(232,162,28,.8)}
+.pin .ball{font-size:18px}
+.tcard .em{font-size:20px}
+.pin .ball,.tcard .em{filter:saturate(.85)}
+.rcard .top{font-size:0}
+.rcard .top .ico{width:44px;height:44px;color:#fff}
+.rcard .top .ico svg{stroke-width:1.75}
+
+/* 더 화려하게: 섹션 틴트, 칩 색, 아이콘 그라디언트 */
+#captain{background:linear-gradient(180deg,transparent,var(--tint-gold) 35%,var(--tint-sunset) 75%,transparent)}
+#map{background:linear-gradient(180deg,transparent,var(--tint-sea) 45%,transparent)}
+#tips{background:linear-gradient(180deg,transparent,var(--tint-forest) 45%,transparent)}
+#quiz{background:linear-gradient(180deg,transparent,var(--tint-indigo) 35%,var(--tint-sea) 75%,transparent)}
+#finish{background:radial-gradient(45% 60% at 20% 50%,color-mix(in srgb,var(--sunset) 18%,transparent),transparent 70%),radial-gradient(45% 60% at 80% 50%,color-mix(in srgb,var(--gold) 22%,transparent),transparent 70%)}
+nav.chips a{border-bottom:3px solid transparent;border-radius:8px 8px 0 0}
+nav.chips a:nth-child(7n+1){--k:var(--sunset)}nav.chips a:nth-child(7n+2){--k:var(--forest)}nav.chips a:nth-child(7n+3){--k:var(--sea)}nav.chips a:nth-child(7n+4){--k:var(--teal)}nav.chips a:nth-child(7n+5){--k:var(--indigo)}nav.chips a:nth-child(7n+6){--k:var(--gold)}nav.chips a:nth-child(7n+7){--k:var(--magenta)}
+nav.chips a{border-bottom-color:color-mix(in srgb,var(--k) 55%,transparent)}
+nav.chips a:hover{border-bottom-color:var(--k)}
+nav.chips a small{color:var(--k)}
+#captain .sec-h .ic{background:linear-gradient(150deg,var(--sunset),var(--magenta))!important}
+#what .sec-h .ic{background:linear-gradient(150deg,var(--teal),var(--forest))!important}
+#map .sec-h .ic{background:linear-gradient(150deg,var(--sea),var(--indigo))!important}
+#tips .sec-h .ic{background:linear-gradient(150deg,#2FBF85,var(--forest))!important}
+#rest .sec-h .ic{background:linear-gradient(150deg,var(--indigo),var(--magenta))!important}
+#trails .sec-h .ic{background:linear-gradient(150deg,var(--gold),var(--sunset))!important}
+#quiz .sec-h .ic{background:linear-gradient(150deg,var(--gold),#F28C28)!important}
+#words .sec-h .ic{background:linear-gradient(150deg,var(--indigo),var(--sea))!important}
+
+/* ===== 밝은 첫 화면 ===== */
+.hero{color:var(--ink);background:radial-gradient(40% 40% at 72% 72%,rgba(232,162,28,.30),transparent 62%),radial-gradient(50% 50% at 10% 15%,rgba(242,100,58,.22),transparent 62%),radial-gradient(45% 45% at 90% 10%,rgba(214,51,108,.16),transparent 60%),radial-gradient(70% 60% at 50% 100%,rgba(14,140,154,.22),transparent 65%),linear-gradient(170deg,#CDEBFF 0%,#EAF6FF 45%,#FFF3E2 100%)}
+.hero::before{display:none}
+.hero .kicker{color:var(--mark)}
+.hero h1{color:var(--ink);text-shadow:none}
+.hero h1 em{background:linear-gradient(90deg,#D9480F,#C2255C);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{color:var(--ink2)}
+.stats span{background:rgba(255,255,255,.85);border-color:var(--line);color:var(--ink);backdrop-filter:none}
+.stats b{color:var(--sunset)}
+.film{box-shadow:0 24px 50px -22px rgba(21,35,58,.45),0 0 0 1px rgba(21,35,58,.08)}
+.ctrl .pill{background:#fff;color:var(--ink);border-color:var(--line)}
+.ctrl .pill.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.ctrl .time{color:var(--ink2)}
+.cue{color:var(--ink);background:rgba(255,255,255,.85);border-color:var(--line)}
+.film.ended~.cue{background:var(--accent);color:#fff}
+#ridgeBack path{fill:#9ED3F2;opacity:.55}
+#ridgeFront path{fill:#8FD1B0;opacity:.5}
+
+/* ===== 3차 검토 반영: 밝지만 선명하게 ===== */
+:root{--tint-forest:#D3EEDF;--tint-sea:#D4E6FA;--tint-gold:#FAE6BC;--tint-sunset:#FBD9CB;--tint-indigo:#DCDCF6}
+.hero{background:radial-gradient(40% 40% at 72% 72%,rgba(232,162,28,.45),transparent 62%),radial-gradient(50% 50% at 10% 15%,rgba(242,100,58,.40),transparent 62%),radial-gradient(45% 45% at 90% 10%,rgba(214,51,108,.30),transparent 60%),radial-gradient(70% 60% at 50% 100%,rgba(14,140,154,.38),transparent 65%),linear-gradient(170deg,#9FD8FF 0%,#E2F3FF 45%,#FFF0DA 100%)}
+nav.chips a small{color:color-mix(in srgb,var(--k) 70%,#15233A)}
+.stats b{color:#D9480F}
+
+/* 첫 화면은 밝은 바탕이라 어떤 테마에서도 진한 글자로 고정 */
+.hero{--ink:#15233A;--ink2:#3D4A63;--line:rgba(21,35,58,.14);--accent:#0F6B4A;--accent-ink:#FFFFFF;--mark:#B5361F;color-scheme:light}
+.ctrl .pill.on,.film.ended~.cue{color:var(--accent-ink)}
+.hero .stats b{color:#C2410C}
+nav.chips a:nth-child(7n+6) small{color:color-mix(in srgb,var(--k) 55%,#15233A)}
+.film:not(.playing) .big::after{animation-iteration-count:2;border:2px solid rgba(21,35,58,.45);box-shadow:0 0 0 2px rgba(255,255,255,.8)}
+.iso-hill .orbit{animation:spin 6s cubic-bezier(.4,0,.2,1) 1 both}
+.iso-hill:hover .orbit{animation:spin 6s cubic-bezier(.4,0,.2,1) infinite}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="walker" aria-hidden="true">
+  <div class="track"><div class="done" id="wDone"></div><span class="me" id="wMe"></span><span class="flag"><i class="ico" data-i="flag"></i></span></div>
+  <div class="stamps"><i class="ico" data-i="award"></i><span id="stampCount">0/12</span></div>
+</div>
+
+<header class="hero" id="top">
+  <svg class="ridge" id="ridgeBack" viewBox="0 0 1440 240" preserveAspectRatio="none" aria-hidden="true"><path d="M0 240V150l120-50 110 40 150-90 130 70 120-40 160 80 140-100 170 90 120-40 120 60v130z" fill="#0B4F6B" opacity=".45"/></svg>
+  <svg class="ridge" id="ridgeFront" viewBox="0 0 1440 240" preserveAspectRatio="none" aria-hidden="true"><path d="M0 240V190l160-40 140 30 170-70 150 60 160-30 150 50 170-60 160 40 180-20v130z" fill="#0A3A55" opacity=".6"/></svg>
+  <div class="wrap">
+    <p class="kicker"><i class="ico" data-i="compass"></i> 초등학생을 위한 걷기 백과사전</p>
+    <h1>엄홍길 대장님과 함께 걷는<br><em>전국 둘레길 백과사전</em></h1>
+    <p class="sub">산 꼭대기까지 오르지 않아도 괜찮아요. 산과 바다, 마을의 둘레를 따라 천천히 걸으면 돼요.</p>
+    <div class="stats"><span><b>12</b>곳의 둘레길</span><span><b>8</b>곳의 휴게소</span><span><b>16</b>좌 대장님 이야기</span></div>
+    <div class="film" id="film">
+      <canvas id="filmCanvas" width="1280" height="720" aria-label="둘레길 소개 30초 영상"></canvas>
+      <button class="big" id="bigPlay" aria-label="영상 재생"></button>
+    </div>
+    <div class="ctrl">
+      <button class="pill on" id="btnPlay">▶ 재생</button>
+      <button class="pill" id="btnRestart">⟲ 처음부터</button>
+      <span class="time" id="filmTime">0:00 / 0:30 · 소리를 켜고 보세요</span>
+    </div>
+    <a href="#captain" class="cue">아래로 걸어가 볼까요 <span aria-hidden="true">↓</span></a>
+  </div>
+</header>
+
+<nav class="chips"><div class="wrap">
+  <a href="#captain"><small>01</small>대장님</a><a href="#what"><small>02</small>둘레길이란</a><a href="#map"><small>03</small>3D 지도</a><a href="#tips"><small>04</small>걷기 약속</a><a href="#rest"><small>05</small>휴게소</a><a href="#trails"><small>06</small>둘레길 12곳</a><a href="#quiz"><small>07</small>퀴즈</a><a href="#words"><small>08</small>낱말 수첩</a><a href="#finish"><small>09</small>수료증</a>
+</div></nav>
+
+<main>
+<section id="captain"><div class="wrap">
+  <div class="sec-h reveal"><div class="ic" style="background:var(--sunset)"><i class="ico" data-i="mountain"></i></div><div><span class="leg">STEP 01 · 만나기</span><h2>엄홍길 대장님은 누구일까요?</h2></div><p>세계에서 가장 높은 산들을 오른 우리나라 산악인이에요</p></div>
+  <p class="guide reveal"><i class="ico" data-i="compass"></i><span>탐험을 떠나기 전에, 히말라야를 오른 산악인의 이야기부터 들어 봐요.</span></p>
+  <div class="cap clay reveal">
+    <figure class="avatar" style="margin:0" aria-label="히말라야 봉우리 꼭대기에 깃발을 꽂은 산악인 그림">
+      <svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="cav" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A2E8C"/><stop offset=".55" stop-color="#D6336C"/><stop offset="1" stop-color="#F7B267"/></linearGradient>
+          <radialGradient id="csun"><stop offset="0" stop-color="#FFE3A3"/><stop offset="1" stop-color="#FFE3A3" stop-opacity="0"/></radialGradient>
+          <linearGradient id="csnow" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C9CCF2"/></linearGradient>
+        </defs>
+        <rect width="300" height="340" fill="url(#cav)"/>
+        <circle cx="210" cy="190" r="110" fill="url(#csun)"/><circle cx="210" cy="190" r="26" fill="#FFE9B8"/>
+        <g fill="#fff" opacity=".7"><circle cx="40" cy="40" r="1.4"/><circle cx="90" cy="24" r="1"/><circle cx="150" cy="50" r="1.2"/><circle cx="250" cy="30" r="1.4"/><circle cx="270" cy="80" r="1"/></g>
+        <path d="M0 260 L60 180 L95 215 L150 120 L200 190 L235 160 L300 240 V340 H0Z" fill="#4A4F9E"/>
+        <path d="M150 120 L172 152 L160 148 L150 160 L140 150 L130 156Z" fill="url(#csnow)"/>
+        <path d="M0 300 L70 230 L120 262 L175 205 L230 250 L300 220 V340 H0Z" fill="#2B2F6E"/>
+        <path d="M175 205 L190 225 L180 222 L172 230 L165 224Z" fill="url(#csnow)" opacity=".9"/>
+        <path d="M0 340 V310 L90 270 L150 300 L220 268 L300 296 V340Z" fill="#15184A"/>
+        <!-- 꼭대기에서 깃발을 든 산악인 실루엣 -->
+        <g transform="translate(150 121)" fill="#15233A" stroke="#15233A" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M-5 0 L-3 -16 M5 0 L3 -16" stroke-width="4.5" fill="none"/>
+          <path d="M-6 -15 Q-7 -28 -4 -33 L5 -33 Q8 -28 6 -15 Z" stroke-width="1"/>
+          <rect x="-13" y="-33" width="9" height="15" rx="3" stroke-width="1"/>
+          <circle cx="0.5" cy="-38" r="4.2" stroke="none"/>
+          <path d="M-7 -41 h15" stroke-width="2.2"/>
+          <path d="M5 -31 L13 -44" stroke-width="3.5" fill="none"/>
+          <path d="M13 -30 L13 -66" stroke-width="2" fill="none"/>
+          <path d="M13 -66 L36 -60 L13 -53 Z" fill="#F2643A" stroke="none"/>
+          <path d="M-5 -30 L-14 -14 L-17 0" stroke-width="1.6" fill="none"/>
+        </g>
+      </svg>
+      <figcaption>히말라야 8,000m급 봉우리 16개</figcaption>
+    </figure>
+    <div>
+      <h3 style="margin:0;font-size:30px" id="capName">엄홍길 대장님</h3>
+      <ul id="capFacts"></ul>
+      <div class="peaks" id="peaks" title="히말라야 8000m급 봉우리 16개"></div>
+      <p class="lesson" id="capLesson"></p>
+      <p class="note">이 페이지는 아이들의 공부를 위해 만든 학습 자료예요. 엄홍길 대장님이나 엄홍길휴먼재단이 직접 만든 페이지는 아니에요.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="what" style="background:linear-gradient(180deg,transparent,var(--tint-forest) 40%,var(--tint-sea) 75%,transparent)"><div class="wrap">
+  <div class="sec-h reveal"><div class="ic" style="background:var(--forest)"><i class="ico" data-i="route"></i></div><div><span class="leg">STEP 02 · 알아보기</span><h2>둘레길이 뭐예요?</h2></div><p>대장님이 오른 높은 산과 달리, 둘레길은 누구나 걸을 수 있어요</p></div>
+  <p class="guide reveal"><i class="ico" data-i="compass"></i><span>높은 산에 오르지 않아도 괜찮아요. 오늘 우리가 걸을 길은 산을 빙 둘러 가는 길이에요.</span></p>
+  <div class="what">
+    <div class="reveal">
+      <div class="point"><span class="ico" data-i="mountain" style="background:var(--indigo)"></span><div><b>등산</b>은 산 꼭대기를 향해 <b>위로</b> 올라가는 거예요.</div></div>
+      <div class="point"><span class="ico" data-i="route" style="background:var(--forest)"></span><div><b>둘레길</b>은 산이나 바다, 마을의 <b>둘레(가장자리)</b>를 따라 <b>옆으로 빙 둘러</b> 걷는 길이에요.</div></div>
+      <div class="point"><span class="ico" data-i="trees" style="background:var(--teal)"></span><div>그래서 숨이 덜 차고, 숲·바다·마을 구경을 실컷 할 수 있어요. 가족과 함께 걷기 딱 좋아요.</div></div>
+      <div class="point"><span class="ico" data-i="flag" style="background:var(--sunset)"></span><div>길을 잃지 않게 나무에 <b>리본</b>이나 <b>화살표</b>가 붙어 있어요. 그걸 따라가면 돼요.</div></div>
+    </div>
+    <div class="iso-hill reveal" aria-hidden="true">
+      <div class="plate"><div class="ground"></div><div class="ring"></div><div class="mount"></div><div class="orbit"><span class="hiker"></span></div></div>
+      <span class="tag2" style="left:8%;top:6%">⬆ 등산: 꼭대기로</span>
+      <span class="tag2" style="right:4%;bottom:8%">⟳ 둘레길: 빙 둘러</span>
+    </div>
+  </div>
+</div></section>
+
+<section id="map"><div class="wrap">
+  <div class="sec-h reveal"><div class="ic" style="background:var(--sea)"><i class="ico" data-i="map"></i></div><div><span class="leg">STEP 03 · 고르기</span><h2>탐험대, 어디로 떠날까?</h2></div><p>지도 위에서 마우스를 움직이면 지도가 기울어져요. 깃발을 눌러 보세요</p></div>
+  <p class="guide reveal"><i class="ico" data-i="compass"></i><span>동그란 깃발은 <b>둘레길</b>, 네모난 깃발은 가는 길에 쉬어 가는 <b>휴게소</b>예요. 마음에 드는 곳을 골라 봐요.</span></p>
+  <div class="mapzone">
+    <div class="stage reveal" id="stage">
+      <div class="sea"></div>
+      <div class="board" id="board">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            <filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2.5" stdDeviation="0" flood-color="#0A4A33"/></filter>
+            <linearGradient id="land" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7EDCA6"/><stop offset=".55" stop-color="#2FA872"/><stop offset="1" stop-color="#0F6B4A"/></linearGradient>
+          </defs>
+          <path filter="url(#sh)" fill="url(#land)" stroke="#fff" stroke-width=".6" stroke-linejoin="round" d="M30 18 Q31 15 34 14 L45 12 Q55 9 62 6 L66 5 Q68 10 69 15 Q71 22 73 28 Q76 36 77 44 Q79 52 80 60 Q79 65 76 68 Q72 70 68 70 Q62 72 56 72 Q50 74 44 75 Q36 77 30 76 Q25 75 22 71 Q23 66 24 62 Q25 56 26 52 Q23 48 22 45 Q25 41 28 38 Q27 34 26 30 Q29 26 32 24 Q29 21 30 18 Z"/>
+          <ellipse filter="url(#sh)" cx="30" cy="92" rx="8" ry="3.6" fill="url(#land)" stroke="#fff" stroke-width=".6"/>
+          <ellipse cx="88" cy="30" rx="1.4" ry="1" fill="#2FA872" stroke="#fff" stroke-width=".4"/>
+          <path d="M50 30 Q56 40 58 50 Q55 58 50 64" stroke="#0A4A33" stroke-width="2" fill="none" stroke-linecap="round" opacity=".45"/>
+        </svg>
+        <div id="pins"></div>
+      </div>
+      <div class="hint">● 둘레길 · ■ 휴게소</div>
+      <div class="maptoggle"><button class="pill on" data-mt="trail">둘레길</button><button class="pill on" data-mt="rest">휴게소</button></div>
+    </div>
+    <div class="detail clay reveal" id="detail">
+      <span class="kicker">PICK A TRAIL</span>
+      <h3 style="font-size:28px;margin:6px 0 10px">지도에서 깃발을 골라 보세요</h3>
+      <p style="color:var(--ink2)">어느 지역에 어떤 둘레길과 휴게소가 있는지 알려 줄게요.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="tips"><div class="wrap">
+  <div class="sec-h reveal"><div class="ic" style="background:var(--forest)"><i class="ico" data-i="shield"></i></div><div><span class="leg">STEP 04 · 약속하기</span><h2>출발 전, 꼭 지킬 약속</h2></div><p>안전하고 즐겁게 걸으려면 꼭 지켜요</p></div>
+  <p class="guide reveal"><i class="ico" data-i="compass"></i><span>대장님 같은 산악인도 출발 전에 늘 준비물과 약속부터 확인한대요. 우리도 하나씩 짚어 봐요.</span></p>
+  <div class="tips" id="tipList"></div>
+</div></section>
+
+<section id="rest" style="background:linear-gradient(180deg,transparent,var(--tint-sea) 35%,var(--tint-sea) 70%,transparent)"><div class="wrap">
+  <div class="sec-h reveal"><div class="ic" style="background:var(--indigo)"><i class="ico" data-i="car"></i></div><div><span class="leg">STEP 05 · 가는 길</span><h2>둘레길 가는 길, 유명 휴게소</h2></div><p>고속도로를 달리다 잠깐 쉬어 가는 곳이에요. 맛있는 것도, 볼거리도 가득해요</p></div>
+  <p class="guide reveal"><i class="ico" data-i="compass"></i><span>약속을 지켰으니 이제 출발! 가는 길에 휴게소에서 잠깐 쉬어 가요.</span></p>
+  <div class="road reveal" aria-hidden="true">
+    <div class="lane"></div>
+    <span class="car c1"><i></i></span><span class="car c2"><i></i></span><span class="car c3"><i></i></span>
+    <div class="stop">P 휴게소</div>
+  </div>
+  <div class="tips rtips" id="restTips"></div>
+  <div class="grid" id="restGrid" style="margin-top:22px"></div>
+</div></section>
+
+<section id="trails" style="background:linear-gradient(180deg,transparent,var(--tint-gold) 30%,var(--tint-sunset) 70%,transparent)"><div class="wrap">
+  <div class="sec-h reveal"><div class="ic" style="background:var(--sunset)"><i class="ico" data-i="route"></i></div><div><span class="leg">STEP 06 · 걷기</span><h2>전국 둘레길 12곳, 걸어 보기</h2></div><p>카드를 누르면 길을 따라 한 걸음씩 걸으며 배워요. 끝까지 가면 스탬프를 받아요</p></div>
+  <p class="guide reveal"><i class="ico" data-i="compass"></i><span>높은 산도 한 걸음부터예요. 천천히, 한 걸음씩 걸어 볼까요?</span></p>
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+</div></section>
+
+<section id="quiz"><div class="wrap">
+  <div class="sec-h reveal"><div class="ic" style="background:var(--gold)"><i class="ico" data-i="help"></i></div><div><span class="leg">STEP 07 · 확인하기</span><h2>둘레길 탐험 퀴즈</h2></div><p>얼마나 기억하고 있는지 맞혀 봐요</p></div>
+  <p class="guide reveal"><i class="ico" data-i="compass"></i><span>열두 길을 걸으며 본 것을 떠올려 봐요. 모르는 낱말은 STEP 08 수첩에 있어요.</span></p>
+  <div class="quiz clay reveal" id="quizBox"></div>
+</div></section>
+
+<section id="words" style="background:linear-gradient(180deg,transparent,var(--tint-indigo) 40%,transparent)"><div class="wrap">
+  <div class="sec-h reveal"><div class="ic" style="background:var(--indigo)"><i class="ico" data-i="book"></i></div><div><span class="leg">STEP 08 · 정리하기</span><h2>산길 낱말 수첩</h2></div><p>카드를 누르면 뒤집혀서 뜻이 나와요</p></div>
+  <p class="guide reveal"><i class="ico" data-i="compass"></i><span>퀴즈에서 헷갈린 낱말을 수첩에서 확인하고, 수료증을 받으러 가요.</span></p>
+  <div class="gloss" id="gloss"></div>
+</div></section>
+
+<section id="finish"><div class="wrap">
+  <div class="cert reveal">
+    <span class="leg">STEP 09 · 도착</span>
+    <h2>둘레길 탐험 수료증</h2>
+    <div class="big" id="certStamps">0 / 12</div>
+    <p style="color:var(--ink2)">모은 완주 스탬프</p>
+    <p id="certMsg">끝까지 함께 걸어 줘서 고마워요. 다음에는 가족과 함께 진짜 둘레길을 걸어 보세요.</p>
+    <p style="font-size:16px;color:var(--ink2)">— 전국 둘레길 백과사전 탐험대</p>
+    <a class="pill on" href="#trails">스탬프 더 모으러 가기</a>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p>전국 둘레길 백과사전 · 초등학생을 위한 학습 자료</p>
+  <p>길 길이와 코스 수는 바뀔 수 있어요. 실제로 걷기 전에는 어른과 함께 공식 안내를 꼭 확인하세요.<br>엄홍길 대장님 및 엄홍길휴먼재단과 관련 없는 비공식 교육 자료입니다.</p>
+  <p><a href="#top" style="color:inherit">맨 위로 ↑</a></p>
+</div></footer>
+
+<button class="bgm" id="bgmBtn" aria-pressed="false"><span class="eq"><i></i><i></i><i></i></span><span id="bgmTxt">경쾌한 음악 켜기</span></button>
+
+<dialog class="walk" id="walk">
+  <div class="top" id="wTop"></div>
+  <div class="steps" id="wSteps"></div>
+  <div class="content" id="wContent"></div>
+  <div class="nav"><button class="pill" id="wPrev">◀ 뒤로</button><button class="pill on" id="wNext">한 걸음 더 ▶</button></div>
+</dialog>
+
+<script>
+/* 둘레길 탐험 데이터 (초등 3학년용) */
+window.TRAILS = [
+  {
+    id: 'jeju-olle', name: '제주올레길', region: '제주특별자치도', emoji: '🍊', color: '#FF9F5A',
+    length: '약 437km', courses: '27개 코스', difficulty: 2, bestSeason: '봄·가을',
+    type: ['바닷길', '마을길'], mapX: 26, mapY: 93,
+    oneLine: '바다를 보며 걷는 제주의 골목길',
+    story: '제주올레길은 제주도를 한 바퀴 빙 돌며 걷는 길이에요. 파란 바다, 까만 돌담, 노란 귤밭을 지나며 걸을 수 있어요. 2007년에 첫 코스가 생겼고, 지금은 우리나라에서 가장 유명한 걷기 길 중 하나가 되었대요. 길마다 작은 마을이 있어서 제주 사람들의 생활도 구경할 수 있어요.',
+    nameStory: '\'올레\'는 제주말로 큰길에서 집 대문까지 이어지는 좁은 골목길을 뜻해요. 그래서 올레길은 \'집으로 가는 길\'처럼 정다운 이름이에요.',
+    see: ['돌하르방', '오름(작은 화산)', '귤밭', '현무암 돌담'],
+    funFacts: [
+      '길 표시로 파란색·주황색 리본과 \'간세\'라는 조랑말 모양 표지를 써요.',
+      '스탬프를 모으는 여권 같은 \'올레 패스포트\'가 있어요.',
+      '제주올레를 본떠 일본 규슈에도 \'올레\'라는 이름의 길이 생겼대요.'
+    ],
+    tip: '탐험 팁: 바닷가 바위는 미끄러워요. 바위 위에서는 뛰지 말고 천천히 걸어요!',
+    scenery: 'sea'
+  },
+  {
+    id: 'jirisan', name: '지리산둘레길', region: '전북·전남·경남', emoji: '⛰️', color: '#7FC8A9',
+    length: '약 274km', courses: '약 22개 구간', difficulty: 3, bestSeason: '봄·가을',
+    type: ['산길', '마을길', '숲길'], mapX: 45, mapY: 62,
+    oneLine: '큰 산 지리산을 빙 둘러 걷는 마을길',
+    story: '지리산둘레길은 커다란 지리산을 꼭대기까지 오르지 않고 빙 둘러서 걷는 길이에요. 전라북도, 전라남도, 경상남도 세 개의 도에 걸쳐 있어요. 옛날 사람들이 오가던 고갯길과 논밭, 산골 마을을 지나가요. 한 바퀴를 다 걸으면 약 274km나 된대요!',
+    nameStory: '\'둘레\'는 무언가의 바깥 테두리를 말해요. 지리산의 둘레를 따라 걷는 길이라서 지리산둘레길이에요.',
+    see: ['계단식 논(다랑논)', '산골 마을', '시냇물', '감나무'],
+    funFacts: [
+      '남원, 구례, 하동, 산청, 함양 다섯 시·군을 지나가요.',
+      '우리나라에서 처음 생긴 \'둘레길\' 중 하나예요.',
+      '지리산은 우리나라 첫 번째 국립공원이에요(1967년).'
+    ],
+    tip: '탐험 팁: 산길은 해가 빨리 져요. 오후 늦게 출발하지 말고 아침 일찍 걸어요!',
+    scenery: 'mountain'
+  },
+  {
+    id: 'bukhansan', name: '북한산둘레길', region: '서울·경기', emoji: '🌳', color: '#A0D995',
+    length: '약 70km', courses: '21개 구간', difficulty: 1, bestSeason: '봄·가을',
+    type: ['숲길', '마을길'], mapX: 39, mapY: 19,
+    oneLine: '서울 가까이에서 만나는 숲속 산책길',
+    story: '북한산둘레길은 서울과 경기도에 걸친 북한산과 도봉산 아랫자락을 빙 도는 길이에요. 가파른 산꼭대기 대신 산허리를 따라 걸어서 가족 모두 편하게 걸을 수 있어요. 지하철이나 버스로도 쉽게 갈 수 있어서 인기가 많대요. 숲속에서 새소리를 들으며 걸어 봐요.',
+    nameStory: '\'북한산\'은 한강의 북쪽에 있는 큰 산이라는 뜻이에요. 그 산의 둘레를 따라가는 길이라 북한산둘레길이에요.',
+    see: ['소나무 숲', '계곡', '다람쥐', '전망대'],
+    funFacts: [
+      '북한산은 큰 도시 안에 있는 국립공원으로 유명해요.',
+      '구간마다 \'소나무숲길\', \'순례길\'처럼 예쁜 이름이 붙어 있어요.',
+      '도봉산 쪽 구간까지 이어져서 두 산을 함께 돌 수 있어요.'
+    ],
+    tip: '탐험 팁: 다람쥐가 귀여워도 과자를 주면 안 돼요. 야생 동물은 스스로 먹이를 찾아야 해요!',
+    scenery: 'forest'
+  },
+  {
+    id: 'seoul', name: '서울둘레길', region: '서울특별시', emoji: '🏙️', color: '#8EC5FC',
+    length: '약 157km', courses: '21개 코스', difficulty: 1, bestSeason: '봄·가을',
+    type: ['숲길', '강길', '마을길'], mapX: 36, mapY: 24,
+    oneLine: '서울을 한 바퀴 빙 도는 초록 산책길',
+    story: '서울둘레길은 서울을 둘러싼 산과 하천을 이어서 서울을 한 바퀴 도는 길이에요. 숲길도 있고 한강과 하천을 따라 걷는 길도 있어요. 큰 도시 안에 이렇게 긴 숲길이 있다니 신기하죠? 지하철역에서 가까운 곳이 많아서 쉽게 시작할 수 있어요.',
+    nameStory: '서울의 둘레를 따라 걷는 길이라서 서울둘레길이에요. 주황색 리본과 표지판이 길을 알려 줘요.',
+    see: ['한강', '산 위 전망대', '도시 풍경', '하천의 오리'],
+    funFacts: [
+      '처음에는 8개 코스였는데 2024년에 더 짧은 21개 코스로 새로 나눴어요.',
+      '코스마다 스탬프를 찍을 수 있어서 모으는 재미가 있어요.',
+      '다 걸으면 \'완주 인증서\'를 받을 수 있대요.'
+    ],
+    tip: '탐험 팁: 찻길을 건널 때는 꼭 횡단보도로, 어른 손을 잡고 건너요!',
+    scenery: 'city'
+  },
+  {
+    id: 'haeparang', name: '해파랑길', region: '부산~강원 동해안', emoji: '🌅', color: '#6EC6FF',
+    length: '약 750km', courses: '50개 코스', difficulty: 2, bestSeason: '봄·여름·가을',
+    type: ['바닷길', '마을길'], mapX: 78, mapY: 44,
+    oneLine: '해 뜨는 동해 바다를 따라 걷는 긴 길',
+    story: '해파랑길은 부산 오륙도에서 시작해 강원도 고성 통일전망대까지 동해 바다를 따라 걷는 길이에요. 부산, 울산, 경북, 강원 네 곳의 바닷가를 지나요. 아침에 해가 바다에서 떠오르는 멋진 모습을 볼 수 있어요. 모래사장, 등대, 항구를 차례로 만나요.',
+    nameStory: '\'해\'는 떠오르는 해, \'파랑\'은 파란 바다, \'길\'은 함께 걷는 길이라는 뜻이에요. 해와 바다를 벗 삼아 걷는다는 이름이에요.',
+    see: ['일출(해돋이)', '등대', '모래사장', '고깃배와 항구'],
+    funFacts: [
+      '길이가 약 750km로 서울에서 부산까지 거리의 거의 두 배쯤 돼요.',
+      '남파랑길과 출발점(부산 오륙도)이 같아요.',
+      '끝은 북한과 가까운 강원도 고성 통일전망대예요.'
+    ],
+    tip: '탐험 팁: 바닷바람이 세고 햇볕이 강해요. 모자와 선크림을 꼭 챙겨요!',
+    scenery: 'sea'
+  },
+  {
+    id: 'namparang', name: '남파랑길', region: '부산~전남 남해안', emoji: '🐚', color: '#FFB3C6',
+    length: '약 1,470km', courses: '90개 코스', difficulty: 2, bestSeason: '봄·가을',
+    type: ['바닷길', '마을길'], mapX: 55, mapY: 73,
+    oneLine: '섬이 많은 남쪽 바다를 따라 걷는 길',
+    story: '남파랑길은 부산 오륙도에서 출발해 전라남도 해남 땅끝마을까지 남해안을 따라 걷는 길이에요. 남쪽 바다에는 크고 작은 섬이 아주 많아서 경치가 정말 예뻐요. 2020년에 모든 코스가 열렸대요. 우리나라 걷기 길 중에서 아주 긴 길이에요.',
+    nameStory: '\'남\'쪽의 \'파랑\'(쪽빛) 바다와 \'함께\' 걷는 길이라는 뜻이에요. 해파랑길의 남쪽 친구 같은 이름이죠.',
+    see: ['작은 섬들', '다리', '바닷가 마을', '갯벌'],
+    funFacts: [
+      '끝은 한반도 땅의 남쪽 끝, 해남 땅끝마을이에요.',
+      '약 1,470km로 아주아주 길어서 다 걸으려면 몇 달이 걸릴 수 있어요.',
+      '부산, 경남, 전남의 여러 시·군을 지나가요.'
+    ],
+    tip: '탐험 팁: 갯벌에 들어갈 때는 물때(바닷물이 들어오는 시간)를 꼭 확인해요!',
+    scenery: 'sea'
+  },
+  {
+    id: 'ganghwa', name: '강화나들길', region: '인천광역시 강화군', emoji: '🏯', color: '#C3A6FF',
+    length: '약 300km', courses: '약 20개 코스', difficulty: 1, bestSeason: '봄·가을',
+    type: ['역사길', '바닷길', '마을길'], mapX: 30, mapY: 20,
+    oneLine: '역사 이야기가 가득한 섬마을 길',
+    story: '강화나들길은 인천 강화도와 주변 섬을 걷는 길이에요. 강화도는 옛날 고려 시대에 임금님이 잠시 도읍(나라의 수도)을 옮긴 곳이라 역사 유적이 아주 많아요. 성곽, 고인돌, 옛 군사 시설을 보며 걸을 수 있어요. 바닷가 갯벌과 논길도 함께 만나요.',
+    nameStory: '\'나들\'은 \'나들이\'에서 온 말이에요. 가볍게 나들이하듯 즐겁게 걷는 길이라는 뜻이에요.',
+    see: ['고인돌', '성곽과 돈대(작은 요새)', '갯벌', '저어새 같은 새'],
+    funFacts: [
+      '강화 고인돌은 유네스코 세계유산이에요.',
+      '단군 할아버지가 하늘에 제사를 지냈다는 마니산 참성단이 강화도에 있어요.',
+      '바다 건너 북한 땅이 보이는 곳도 있대요.'
+    ],
+    tip: '탐험 팁: 유적에는 올라가거나 낙서하지 않아요. 눈으로만 보고 소중히 지켜요!',
+    scenery: 'village'
+  },
+  {
+    id: 'sobaeksan', name: '소백산자락길', region: '경북·충북·강원', emoji: '🌸', color: '#FFD166',
+    length: '약 143km', courses: '12자락', difficulty: 2, bestSeason: '봄(철쭉)·가을',
+    type: ['산길', '숲길', '마을길'], mapX: 60, mapY: 37,
+    oneLine: '소백산 치맛자락을 따라 도는 산골 길',
+    story: '소백산자락길은 소백산 아랫자락을 빙 둘러 걷는 길이에요. 경상북도 영주·봉화, 충청북도 단양, 강원도 영월을 지나요. 옛날 선비들이 한양(서울)으로 가던 고갯길도 있어요. 봄에는 산에 철쭉꽃이 활짝 펴서 정말 예뻐요.',
+    nameStory: '\'자락\'은 옷이나 산의 아래쪽 넓게 퍼진 부분을 말해요. 소백산의 아랫부분을 따라 걷는 길이라 소백산자락길이에요. 코스도 \'1자락, 2자락\'처럼 불러요.',
+    see: ['철쭉꽃', '옛 고갯길(죽령)', '사과밭', '선비 마을'],
+    funFacts: [
+      '코스를 \'구간\' 대신 \'자락\'이라고 불러요.',
+      '영주에는 우리나라 첫 서원(옛날 학교)인 소수서원이 있어요.',
+      '죽령 옛길은 아주 오래전부터 사람들이 넘던 고갯길이에요.'
+    ],
+    tip: '탐험 팁: 오르막에서는 숨이 차지 않게 천천히, 자주 쉬면서 물을 마셔요!',
+    scenery: 'mountain'
+  },
+  {
+    id: 'byeonsan', name: '변산마실길', region: '전북특별자치도 부안군', emoji: '🦀', color: '#FF8FAB',
+    length: '약 60여km', courses: '8개 코스', difficulty: 1, bestSeason: '봄·가을',
+    type: ['바닷길', '마을길'], mapX: 30, mapY: 55,
+    oneLine: '서해 노을과 갯벌을 만나는 이웃 마을 길',
+    story: '변산마실길은 전라북도 부안의 변산반도 바닷가를 따라 걷는 길이에요. 서해 바다라서 해가 바다로 지는 붉은 노을이 아름다워요. 바닷물이 빠지면 넓은 갯벌이 드러나 게와 조개를 볼 수 있어요. 책을 쌓아 놓은 것 같은 바위 절벽, 채석강도 유명해요.',
+    nameStory: '\'마실\'은 이웃집에 놀러 간다는 옛말이에요. 이웃 마을에 놀러 가듯 편하게 걷는 길이라는 뜻이에요.',
+    see: ['채석강 바위 절벽', '서해 노을', '갯벌 속 게', '바닷가 마을'],
+    funFacts: [
+      '채석강 바위는 아주 오랜 세월 동안 층층이 쌓여 책을 포갠 모양이 되었대요.',
+      '변산반도는 바다와 산이 함께 있는 국립공원이에요.',
+      '서해는 바닷물이 들어오고 나가는 차이(밀물·썰물)가 커요.'
+    ],
+    tip: '탐험 팁: 갯벌의 게나 조개는 구경만 하고 제자리에 두어요!',
+    scenery: 'sea'
+  },
+  {
+    id: 'gangneung-bau', name: '강릉바우길', region: '강원특별자치도 강릉시', emoji: '🪨', color: '#9ADCFF',
+    length: '약 300km 이상', courses: '약 17개 구간', difficulty: 2, bestSeason: '여름·가을',
+    type: ['숲길', '산길', '바닷길'], mapX: 68, mapY: 25,
+    oneLine: '대관령 숲에서 동해 바다까지 이어진 길',
+    story: '강릉바우길은 높은 대관령 고개의 숲에서 시작해 강릉의 동해 바닷가까지 이어지는 길이에요. 쭉쭉 뻗은 금강소나무 숲은 공기가 정말 상쾌해요. 산길과 바닷길을 모두 걸을 수 있는 게 특별한 점이에요. 경포호수와 오래된 한옥도 만날 수 있어요.',
+    nameStory: '\'바우\'는 강원도 말로 \'바위\'라는 뜻이에요. 바위처럼 듬직하고 친근한 길이라는 이름이에요.',
+    see: ['금강소나무 숲', '대관령 풍차', '경포호', '동해 바다'],
+    funFacts: [
+      '대관령은 겨울에 눈이 아주 많이 오는 곳으로 유명해요.',
+      '강릉에는 신사임당과 율곡 이이가 태어난 집, 오죽헌이 있어요.',
+      '산에서 바다까지 걸어서 내려갈 수 있는 길이에요.'
+    ],
+    tip: '탐험 팁: 숲에서는 길 표시(리본)를 놓치지 않게 앞뒤를 잘 살펴요!',
+    scenery: 'forest'
+  },
+  {
+    id: 'hallasan', name: '한라산둘레길', region: '제주특별자치도', emoji: '🌲', color: '#B5E48C',
+    length: '약 80km', courses: '여러 구간(약 9개)', difficulty: 2, bestSeason: '봄·가을',
+    type: ['숲길', '산길'], mapX: 33, mapY: 90,
+    oneLine: '한라산 허리를 감싸는 깊은 숲속 길',
+    story: '한라산둘레길은 제주도 한가운데 있는 한라산의 중간 높이(해발 약 600~800m)를 빙 둘러 걷는 숲길이에요. 바닷가를 걷는 올레길과 달리 울창한 숲속을 걸어요. 삼나무, 졸참나무 숲이 하늘을 가려 여름에도 시원해요. 사려니숲길처럼 이름난 숲길도 있어요.',
+    nameStory: '\'한라산\'은 은하수(하늘의 별 무리)를 끌어당길 만큼 높은 산이라는 뜻이래요. 그 산의 둘레를 걷는 길이에요.',
+    see: ['삼나무 숲', '노루', '이끼 낀 돌', '숲속 계곡(건천)'],
+    funFacts: [
+      '한라산은 남한에서 가장 높은 산이에요(약 1,950m).',
+      '옛날 일제강점기에 만든 길을 따라 이어진 구간도 있어요.',
+      '제주의 숲에서는 노루를 만날 수도 있어요.'
+    ],
+    tip: '탐험 팁: 숲은 날씨가 금방 바뀌어요. 얇은 겉옷과 우비를 챙겨요!',
+    scenery: 'forest'
+  },
+  {
+    id: 'dmz-peace', name: 'DMZ 평화의 길', region: '인천~강원 접경지역', emoji: '🕊️', color: '#BDB2FF',
+    length: '약 510km', courses: '35개 코스', difficulty: 2, bestSeason: '봄·가을',
+    type: ['역사길', '강길', '마을길'], mapX: 50, mapY: 12,
+    oneLine: '평화를 바라며 걷는 휴전선 옆 길',
+    story: 'DMZ 평화의 길은 서쪽 인천 강화에서 동쪽 강원도 고성까지, 남과 북 사이 비무장지대(DMZ) 근처를 따라 걷는 길이에요. DMZ는 군대와 무기를 두지 않기로 약속한 땅이에요. 사람이 오랫동안 들어가지 못해서 자연이 잘 보존되어 있대요. 걸으면서 한반도의 평화를 생각해 볼 수 있어요.',
+    nameStory: '\'DMZ\'는 비무장지대(무기를 두지 않는 곳)를 뜻하는 영어 줄임말이에요. 평화를 바라는 마음을 담아 \'평화의 길\'이라고 이름 지었어요.',
+    see: ['임진강', '철책선', '두루미 같은 철새', '전망대'],
+    funFacts: [
+      '인천, 경기, 강원 세 지역을 이어 우리나라를 서쪽에서 동쪽으로 가로질러요.',
+      'DMZ에는 멸종위기 동물들이 많이 살고 있대요.',
+      '해파랑길의 끝, 고성과 이 길의 끝이 만나요.'
+    ],
+    tip: '탐험 팁: 일부 구간은 출입 허가가 필요해요. 정해진 길과 안내를 꼭 따라요!',
+    scenery: 'river'
+  }
+];
+
+window.CAPTAIN = {
+  name: '엄홍길',
+  title: '산악인',
+  facts: [
+    '1960년 경상남도 고성에서 태어났고, 어릴 때 서울 근처 도봉산 아래에서 자랐어요.',
+    '1988년 세계에서 가장 높은 산, 에베레스트에 올랐어요.',
+    '2000년에 히말라야의 8000m가 넘는 산 14개(14좌)를 모두 올랐어요.',
+    '2007년 로체샤르에 오르면서 8000m급 봉우리 16개(14좌+위성봉 2개)를 세계 최초로 모두 올랐어요.',
+    '엄홍길휴먼재단을 만들어 네팔 산골 아이들을 위한 학교(휴먼스쿨)를 짓고 있어요.'
+  ],
+  lesson: '엄홍길 대장은 여러 번 실패하고 다쳐도 포기하지 않고 다시 산에 도전했어요. 그리고 산에서 받은 고마움을 네팔 아이들에게 학교로 돌려주고 있어요. 한 걸음씩 꾸준히 걷는 마음, 그리고 나눌 줄 아는 마음이 산에서 배운 소중한 마음이래요.'
+};
+
+window.WALK_TIPS = [
+  { emoji: '💧', title: '물 챙기기', text: '걷다 보면 목이 말라요. 물병을 꼭 챙기고, 목마르기 전에 조금씩 마셔요.' },
+  { emoji: '🗑️', title: '쓰레기는 되가져가기', text: '내가 가져온 쓰레기는 봉지에 담아 집으로 가져가요. 길을 깨끗하게 지켜요.' },
+  { emoji: '🎀', title: '길 표시 따라가기', text: '나무에 달린 리본과 화살표, 이정표(길 안내판)를 따라가면 길을 잃지 않아요.' },
+  { emoji: '👨‍👩‍👧', title: '어른과 함께 걷기', text: '둘레길은 꼭 어른과 함께 걸어요. 혼자 앞서가거나 뒤처지지 않아요.' },
+  { emoji: '👟', title: '편한 신발 신기', text: '발이 편한 운동화를 신어요. 샌들이나 구두는 미끄러지고 발이 아파요.' },
+  { emoji: '🌿', title: '동물·식물은 눈으로만', text: '꽃을 꺾거나 동물을 만지지 않아요. 독이 있는 것도 있고, 자연이 아파해요.' }
+];
+
+window.QUIZ = [
+  { q: '제주말 \'올레\'는 무슨 뜻일까요?', options: ['큰 바다', '집으로 가는 좁은 골목길', '높은 산', '맛있는 귤'], answer: 1, explain: '올레는 큰길에서 집 대문까지 이어지는 좁은 골목길이라는 제주말이에요.' },
+  { q: '강릉바우길의 \'바우\'는 강원도 말로 무엇일까요?', options: ['바위', '바다', '바람', '바구니'], answer: 0, explain: '바우는 강원도 말로 바위라는 뜻이에요.' },
+  { q: '부산 오륙도에서 강원도 고성까지 동해 바다를 따라 걷는 길은?', options: ['남파랑길', '서울둘레길', '해파랑길', '변산마실길'], answer: 2, explain: '해파랑길은 동해안을 따라 부산에서 고성까지 이어져요.' },
+  { q: '남파랑길의 끝, 한반도 남쪽 끝 마을의 이름은?', options: ['땅끝마을', '하늘마을', '바다마을', '별빛마을'], answer: 0, explain: '남파랑길은 전남 해남의 땅끝마을에서 끝나요.' },
+  { q: '변산마실길의 \'마실\'은 무슨 뜻일까요?', options: ['물 마시기', '이웃집에 놀러 가기', '밥 먹기', '잠자기'], answer: 1, explain: '마실은 이웃집에 놀러 간다는 옛말이에요.' },
+  { q: '둘레길에서 길을 잃지 않으려면 무엇을 따라가야 할까요?', options: ['날아가는 새', '구름', '리본과 화살표 같은 길 표시', '아무 길이나'], answer: 2, explain: '리본, 화살표, 이정표가 둘레길의 길을 알려 줘요.' },
+  { q: '둘레길에서 먹고 남은 쓰레기는 어떻게 해야 할까요?', options: ['숲에 묻는다', '길에 둔다', '집으로 되가져간다', '물에 버린다'], answer: 2, explain: '쓰레기는 봉지에 담아 집으로 가져가야 자연이 깨끗해요.' },
+  { q: '엄홍길 대장이 네팔 아이들을 위해 짓고 있는 것은?', options: ['놀이공원', '학교', '호텔', '수영장'], answer: 1, explain: '엄홍길휴먼재단은 네팔에 휴먼스쿨이라는 학교를 짓고 있어요.' }
+];
+
+window.GLOSSARY = [
+  { word: '둘레길', mean: '산이나 마을, 도시의 둘레를 따라 천천히 걷도록 만든 길이에요.' },
+  { word: '코스', mean: '긴 길을 걷기 좋게 나눈 한 토막이에요. 구간이라고도 해요.' },
+  { word: '완주', mean: '정해진 길을 끝까지 다 걷는 것을 말해요.' },
+  { word: '오름', mean: '제주말로 작은 화산이 만든 동그란 언덕이나 작은 산이에요.' },
+  { word: '해안', mean: '바다와 땅이 만나는 바닷가를 말해요.' },
+  { word: '등산', mean: '산에 오르는 것이에요. 둘레길은 꼭대기보다 산 둘레를 걸어요.' },
+  { word: '이정표', mean: '어느 쪽으로 가면 어디가 나오는지, 거리가 얼마인지 알려 주는 안내판이에요.' },
+  { word: '스탬프', mean: '코스마다 찍을 수 있는 도장이에요. 모으면 걸은 기록이 돼요.' }
+];
+
+</script>
+<script>
+/* TrailFilm — 30초 오프닝 영상 (Canvas + Web Audio, 의존성 없음) */
+(function () {
+  'use strict';
+  var W = 1280, H = 720, DUR = 30;
+  var FONT_T = "'Nanum Myeongjo', serif", FONT_L = "'Noto Sans KR', sans-serif";
+  var C = { paper: '#F7F5EF', ink: '#15233A', forest: '#0F6B4A', teal: '#0E8C9A', seaC: '#1767C7', sunset: '#F2643A',
+    gold: '#E8A21C', indigo: '#3B3BB3', magenta: '#D6336C',
+    sky: '#1767C7', mint: '#0E8C9A', grass: '#0F6B4A', cream: '#F7F5EF', coral: '#F2643A',
+    sun: '#E8A21C', lav: '#3B3BB3', skin: '#E2AE88', red: '#B5361C', white: '#FFFFFF',
+    navy: '#1F2E4D', khaki: '#B49E72', pack: '#2F4F3A', pole: '#9AA3AE', boot: '#3A2A20' };
+
+  var canvas = null, g = null, dpr = 1;
+  var actx = null, master = null, comp = null, bus = null, noiseBuf = null;
+  var startAt = 0, nextStep = 0, started = false, ended = false, playing = false;
+  var rafId = 0, schedTimer = 0, fbClock = null;
+
+  /* ---------------- helpers ---------------- */
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function prog(t, a, b) { return clamp((t - a) / (b - a), 0, 1); }
+  function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+  function easeOutSoft(t) { var c1 = 0.9, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); }
+  function hash(i, j) { var s = Math.sin(i * 127.1 + j * 311.7) * 43758.5453; return s - Math.floor(s); }
+  function shade(hex, amt) {
+    var hx = hex.slice(1); if (hx.length === 3) hx = hx.replace(/./g, '$&$&');
+    var n = parseInt(hx, 16), r = n >> 16, gg = (n >> 8) & 255, b = n & 255;
+    var tgt = amt > 0 ? 255 : 0, a = Math.abs(amt);
+    r = Math.round(lerp(r, tgt, a)); gg = Math.round(lerp(gg, tgt, a)); b = Math.round(lerp(b, tgt, a));
+    return 'rgb(' + r + ',' + gg + ',' + b + ')';
+  }
+  function rr(x, y, w, h, r) {
+    r = Math.min(r, w / 2, h / 2);
+    g.beginPath(); g.moveTo(x + r, y);
+    g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
+    g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+  }
+  // flat card: soft shadow + subtle vertical shading
+  function clay(x, y, w, h, r, col, soft) {
+    g.save();
+    if (soft) { g.shadowColor = 'rgba(21,35,58,0.22)'; g.shadowBlur = 18; g.shadowOffsetY = 6; }
+    else { g.fillStyle = 'rgba(21,35,58,0.12)'; rr(x + 1, y + 3, w, h, r); g.fill(); }
+    var gr = g.createLinearGradient(x, y, x, y + h);
+    gr.addColorStop(0, shade(col, 0.06)); gr.addColorStop(1, shade(col, -0.06));
+    g.fillStyle = gr; rr(x, y, w, h, r); g.fill();
+    g.restore();
+  }
+  function ball(x, y, r, col) {
+    var gr = g.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.1, x, y, r);
+    gr.addColorStop(0, shade(col, 0.12)); gr.addColorStop(1, shade(col, -0.08));
+    g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+  }
+  // kind: 't' = serif title (800), otherwise sans label (700)
+  function text(s, x, y, size, col, outline, align, kind) {
+    g.font = (kind === 't' ? '800 ' : '700 ') + size + 'px ' + (kind === 't' ? FONT_T : FONT_L);
+    g.textAlign = align || 'center'; g.textBaseline = 'middle';
+    g.lineJoin = 'round';
+    if (outline !== false) {
+      g.save(); g.shadowColor = 'rgba(21,35,58,0.35)'; g.shadowBlur = 14; g.shadowOffsetY = 3;
+      if (outline) { g.strokeStyle = outline; g.lineWidth = size * 0.1; g.strokeText(s, x, y); }
+      g.fillStyle = col; g.fillText(s, x, y); g.restore();
+    }
+    g.fillStyle = col; g.fillText(s, x, y);
+  }
+  function measure(s, size, kind) {
+    g.font = (kind === 't' ? '800 ' : '700 ') + size + 'px ' + (kind === 't' ? FONT_T : FONT_L);
+    return g.measureText(s).width;
+  }
+  function pop(t, a, d) { var p = prog(t, a, a + (d || 0.6)); return p <= 0 ? 0 : easeOut(p); }
+  function popPin(t, a, d) { var p = prog(t, a, a + (d || 0.6)); return p <= 0 ? 0 : easeOutSoft(p); }
+  // gentle reveal: fade + rise (call after translate)
+  function rev(a) { g.globalAlpha *= a; g.translate(0, (1 - a) * 26); var s = 0.97 + 0.03 * a; g.scale(s, s); }
+
+  /* ---------------- backgrounds ---------------- */
+  function sky(top, bot, mid) {
+    var gr = g.createLinearGradient(0, 0, 0, H);
+    gr.addColorStop(0, top); if (mid) gr.addColorStop(0.55, mid); gr.addColorStop(1, bot);
+    g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  }
+  function sunDisc(x, y, r) {
+    var gl = g.createRadialGradient(x, y, r * 0.6, x, y, r * 2.4);
+    gl.addColorStop(0, 'rgba(255,214,140,0.55)'); gl.addColorStop(1, 'rgba(255,214,140,0)');
+    g.fillStyle = gl; g.beginPath(); g.arc(x, y, r * 2.4, 0, 7); g.fill();
+    g.fillStyle = '#FFE2A0'; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+  }
+  function cloud(x, y, s) {
+    g.save(); g.translate(x, y); g.scale(s, s); g.globalAlpha *= 0.85;
+    g.fillStyle = '#FFFFFF';
+    rr(-70, -10, 140, 30, 15); g.fill();
+    g.beginPath(); g.arc(-25, -12, 24, 0, 7); g.arc(15, -18, 30, 0, 7); g.fill();
+    g.restore();
+  }
+  function ridgeY(x, base, amp, freq, off, seed, sharp) {
+    var u = (x + off) * freq + seed;
+    var v = 0.6 * Math.sin(u) + 0.4 * Math.sin(u * 2.3 + seed);
+    if (sharp) v = 1.4 * (1 - Math.abs(Math.sin(u * 0.8))) + 0.3 * Math.sin(u * 3.1) - 0.6;
+    return base - amp * v;
+  }
+  function ridge(base, amp, freq, off, col, seed, sharp) {
+    g.beginPath(); g.moveTo(0, H);
+    for (var x = 0; x <= W + 20; x += 16) g.lineTo(x, ridgeY(x, base, amp, freq, off, seed, sharp));
+    g.lineTo(W, H); g.closePath();
+    var gr = g.createLinearGradient(0, base - amp * 1.4, 0, H);
+    gr.addColorStop(0, shade(col, 0.08)); gr.addColorStop(1, shade(col, -0.18));
+    g.fillStyle = gr; g.fill();
+  }
+  function hills(scroll, sunY) {
+    sky('#1F6FCC', '#E4EEF0', '#7DB4E6');
+    sunDisc(980, sunY, 54);
+    var cx = (scroll * 25) % (W + 400);
+    cloud(((200 + cx) % (W + 400)) - 200, 130, 1);
+    cloud(((760 + cx * 0.7) % (W + 400)) - 200, 90, 0.75);
+    cloud(((1150 + cx * 1.2) % (W + 400)) - 200, 200, 0.6);
+    ridge(380, 70, 0.004, scroll * 20, '#4A55B5', 1, true);
+    ridge(450, 60, 0.006, scroll * 45, C.teal, 3);
+    ridge(540, 45, 0.008, scroll * 80, C.forest, 5);
+    g.fillStyle = shade(C.forest, -0.2); g.fillRect(0, 600, W, 120);
+    g.fillStyle = 'rgba(247,245,239,0.85)'; rr(-20, 610, W + 40, 30, 15); g.fill();
+  }
+
+  /* ---------------- characters ---------------- */
+  // limb: two segments from (x,y); angles from vertical-down, + = forward(right)
+  function limb(x, y, a1, l1, a2, l2, w, col) {
+    var kx = x + Math.sin(a1) * l1, ky = y + Math.cos(a1) * l1;
+    var ex = kx + Math.sin(a2) * l2, ey = ky + Math.cos(a2) * l2;
+    g.strokeStyle = col; g.lineWidth = w; g.lineCap = 'round'; g.lineJoin = 'round';
+    g.beginPath(); g.moveTo(x, y); g.lineTo(kx, ky); g.lineTo(ex, ey); g.stroke();
+    return [ex, ey];
+  }
+  function ease2(s) { return Math.sin(s) * (1 - 0.18 * Math.sin(s) * Math.sin(s)); }
+  // generic hiker, side profile facing right. o: {kid, jacket, pants, hat, pack, sil, wave, poles}
+  function hiker(x, y, s, ph, o) {
+    var kid = o.kid, R = kid ? 15 : 16, T = kid ? 50 : 80, L = kid ? 33 : 52, AW = kid ? 9 : 11;
+    var sil = o.sil, J = sil || o.jacket, P = sil || o.pants, SK = sil || C.skin, HT = sil || o.hat,
+      PK = sil || o.pack, BT = sil || C.boot, PL = sil || C.pole;
+    var walk = o.still ? 0 : 1;
+    g.save(); g.translate(x, y); g.scale(s, s);
+    if (!sil) { g.fillStyle = 'rgba(21,35,58,0.16)'; g.beginPath(); g.ellipse(0, 0, kid ? 26 : 38, 6, 0, 0, 7); g.fill(); }
+    var bob = walk * (1 - Math.cos(2 * ph)) * (kid ? 1.4 : 2);
+    var hipY = -2 * L + 4 + bob * 0.4, shY = hipY - T + 8;
+    g.translate(0, -bob * 0.6);
+    var legA = [], armA = [];
+    for (var k = 0; k < 2; k++) {
+      var sw = ease2(ph + k * Math.PI) * walk;
+      var bend = Math.max(0, Math.cos(ph + k * Math.PI)) * 0.55 * walk;
+      legA.push([sw * 0.42, sw * 0.42 - bend]);
+      armA.push(-sw * 0.5);
+    }
+    function leg(k, col) {
+      var e = limb(0, hipY, legA[k][0], L, legA[k][1], L - 4, kid ? 11 : 15, col);
+      g.fillStyle = BT; rr(e[0] - 6, e[1] - 4, kid ? 16 : 22, kid ? 8 : 10, 4); g.fill();
+    }
+    function arm(k, col, front) {
+      var a1 = armA[k], a2 = a1 + 0.45, hand;
+      if (front && o.wave) { a1 = Math.PI - 0.5 + Math.sin(o.wave * 8) * 0.22; a2 = a1 + 0.35; }
+      hand = limb(2, shY + 4, a1, kid ? 24 : 34, a2, kid ? 22 : 30, AW, col);
+      if (!sil) { g.fillStyle = SK; g.beginPath(); g.arc(hand[0], hand[1], AW * 0.5, 0, 7); g.fill(); }
+      if (o.poles && !(front && o.wave)) {
+        g.strokeStyle = PL; g.lineWidth = 3; g.lineCap = 'round';
+        var tipX = hand[0] + 14 + Math.sin(a1) * 10, tipY = bob * 0.6;
+        g.beginPath(); g.moveTo(hand[0], hand[1] - 8); g.lineTo(tipX, tipY); g.stroke();
+        g.strokeStyle = sil || C.ink; g.lineWidth = 6; g.beginPath(); g.moveTo(hand[0], hand[1] - 10); g.lineTo(hand[0] + 1, hand[1] + 4); g.stroke();
+      }
+    }
+    var backJ = sil || shade(J, -0.22), backP = sil || shade(P, -0.25);
+    arm(1, backJ, false);
+    leg(1, backP);
+    // rucksack (behind, on back = left)
+    var pw = kid ? 22 : 30, ph2 = kid ? 40 : 62;
+    g.fillStyle = PK; rr(-pw - (kid ? 6 : 8), shY - 4, pw, ph2, 7); g.fill();
+    if (!sil) { g.fillStyle = shade(PK, -0.2); rr(-pw - (kid ? 6 : 8), shY + ph2 * 0.55, pw, ph2 * 0.3, 5); g.fill(); }
+    if (!kid) { // rolled mat on top
+      g.fillStyle = sil || C.gold; rr(-pw - 14, shY - 18, pw + 12, 15, 7.5); g.fill();
+      if (!sil) { g.strokeStyle = shade(C.gold, -0.25); g.lineWidth = 2; g.beginPath(); g.moveTo(-pw + 2, shY - 18); g.lineTo(-pw + 2, shY - 3); g.stroke(); }
+    }
+    // torso / jacket
+    g.fillStyle = J;
+    g.beginPath(); g.moveTo(-12, shY - 2); g.quadraticCurveTo(14, shY - 6, 16, shY + 8);
+    g.lineTo(14, hipY + 6); g.lineTo(-13, hipY + 6); g.closePath(); g.fill();
+    if (!sil) {
+      g.fillStyle = 'rgba(0,0,0,0.12)'; g.beginPath(); g.moveTo(-12, shY - 2); g.lineTo(-3, shY); g.lineTo(-4, hipY + 6); g.lineTo(-13, hipY + 6); g.closePath(); g.fill();
+      g.strokeStyle = 'rgba(255,255,255,0.35)'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(10, shY + 6); g.lineTo(9, hipY + 4); g.stroke();
+      g.fillStyle = shade(PK, -0.3); rr(-6, shY + 2, 4, T - 18, 2); g.fill(); // strap
+    }
+    leg(0, P);
+    // neck + head (profile)
+    g.fillStyle = SK; rr(-3, shY - 10, 8, 12, 3); g.fill();
+    var hy = shY - 10 - R + 2;
+    g.beginPath(); g.ellipse(2, hy, R * 0.9, R, 0, 0, 7); g.fill();
+    g.beginPath(); g.moveTo(2 + R * 0.85, hy - 2); g.lineTo(2 + R * 0.85 + 4, hy + 3); g.lineTo(2 + R * 0.8, hy + 5); g.fill();
+    if (!sil) {
+      g.fillStyle = C.ink; g.beginPath(); g.arc(2 + R * 0.45, hy - 1, 1.8, 0, 7); g.fill();
+      g.fillStyle = 'rgba(0,0,0,0.1)'; g.beginPath(); g.ellipse(-2, hy + 2, R * 0.45, R * 0.7, 0, 0, 7); g.fill();
+    }
+    // hat
+    if (o.cap) {
+      g.fillStyle = HT; g.beginPath(); g.ellipse(2, hy - R * 0.45, R * 0.95, R * 0.7, 0, Math.PI, 0); g.fill();
+      rr(2, hy - R * 0.55, R * 1.4, 4, 2); g.fill();
+    } else {
+      g.fillStyle = sil || shade(HT, -0.12); g.beginPath(); g.ellipse(2, hy - R * 0.5, R * 1.9, R * 0.28, -0.04, 0, 7); g.fill();
+      g.fillStyle = HT; rr(2 - R * 0.85, hy - R * 1.35, R * 1.7, R * 0.95, R * 0.4); g.fill();
+      if (!sil) { g.fillStyle = shade(HT, -0.35); g.fillRect(2 - R * 0.85, hy - R * 0.68, R * 1.7, 3); }
+    }
+    arm(0, J, true);
+    g.restore();
+  }
+  function captain(x, y, s, ph, wave, sil) {
+    hiker(x, y, s, ph, { jacket: C.red, pants: C.navy, hat: C.khaki, pack: C.pack, poles: true, wave: wave, sil: sil, still: ph === 0 });
+  }
+  function kid(x, y, s, ph, col, wave) {
+    hiker(x, y, s, ph, { kid: true, jacket: col, pants: '#2A3550', hat: shade(col, -0.25), pack: '#E9DFC8', cap: true, wave: wave, still: ph === 0 && !wave });
+  }
+  var KIDS = [C.teal, C.gold, C.seaC, C.magenta];
+  function bubble(x, y, s, msg, tailX) {
+    if (s <= 0) return;
+    var w = measure(msg, 40) + 64;
+    x = clamp(x, 24, W - 24 - w);
+    g.save(); g.globalAlpha *= s; g.translate(0, (1 - s) * 16);
+    g.save(); g.shadowColor = 'rgba(21,35,58,0.22)'; g.shadowBlur = 18; g.shadowOffsetY = 6;
+    g.fillStyle = '#fff'; rr(x, y - 46, w, 92, 22); g.fill();
+    var tx = clamp(tailX == null ? x + 60 : tailX, x + 30, x + w - 60);
+    g.beginPath(); g.moveTo(tx - 4, y + 44); g.lineTo(tx - 10, y + 84); g.lineTo(tx + 34, y + 44); g.fill(); g.restore();
+    text(msg, x + w / 2, y + 1, 40, C.ink, false);
+    g.restore();
+  }
+
+  /* ---------------- scenes ---------------- */
+  function scene1(t) {
+    var sunY = lerp(560, 200, easeOut(prog(t, 0, 4)));
+    sky('#5DB6F0', '#FFE3A8', '#FFB8A0');
+    g.save(); g.globalAlpha = 0.45 * easeInOut(prog(t, 0, 4)); sky('#7CC8F5', '#FFF0C4', '#FFC9A8'); g.restore();
+    sunDisc(980, sunY, 58);
+    g.save(); g.globalAlpha = 0.5; cloud(150 + t * 30, 140, 1); cloud(700 + t * 18, 95, 0.7); cloud(1100 - t * 12, 210, 0.55); g.restore();
+    var ent = easeOut(prog(t, 0, 2.2));
+    var b1 = 390 + (1 - ent) * 150;
+    ridge(b1, 80, 0.004, t * 20, '#6F86D6', 1, true);
+    var sy = ridgeY(980, b1, 80, 0.004, t * 20, 1, true);
+    captain(980, sy + 4, 0.62, 0, 0, '#1A1740');
+    ridge(470 + (1 - ent) * 220, 60, 0.006, t * 45, '#3FA27A', 3);
+    ridge(560 + (1 - ent) * 300, 45, 0.008, t * 80, C.forest, 5);
+    g.fillStyle = shade(C.forest, -0.3); g.fillRect(0, 610 + (1 - ent) * 200, W, 150);
+    var a = pop(t, 1.0, 0.9), b = pop(t, 1.5, 1.0);
+    if (a > 0) { g.save(); g.translate(640, 220); rev(a); g.shadowColor = 'rgba(255,255,255,.8)'; g.shadowBlur = 12; text('엄홍길 대장님과 함께 걷는', 0, 0, 42, C.ink, false, 'center', 't'); g.shadowBlur = 0; g.shadowColor = 'transparent'; g.restore(); }
+    if (b > 0) {
+      g.save(); g.translate(640, 310); rev(b);
+      text('전국 둘레길 백과사전', 0, 0, 88, C.ink, '#FFFFFF', 'center', 't');
+      g.fillStyle = C.gold; g.fillRect(-60 * b, 62, 120 * b, 4);
+      g.restore();
+    }
+  }
+  function scene2(t) {
+    hills(5 + t * 0.6, 190);
+    var walkIn = easeOut(prog(t, 0, 2.6));
+    var cx = lerp(-160, 470, walkIn), ph = t * 6.5;
+    for (var k = 0; k < 3; k++) {
+      var kx = lerp(-400 - k * 120, 300 - k * 120, easeOut(prog(t, 0.4 + k * 0.2, 3.2 + k * 0.2)));
+      kid(kx, 628, 1, ph + k * 0.7, KIDS[k], 0);
+    }
+    captain(cx, 630, 1.15, ph, 0);
+    bubble(cx - 60, 220, pop(t, 2.4, 0.7), '얘들아, 둘레길은 산을 빙~ 둘러 걷는 길이야!', cx);
+  }
+  var KR = [[0.36, 0], [0.56, 0.03], [0.74, 0.08], [0.9, 0.04], [0.95, 0.14], [0.82, 0.24], [0.73, 0.33], [0.78, 0.46],
+    [0.83, 0.6], [0.8, 0.74], [0.7, 0.85], [0.52, 0.88], [0.34, 0.86], [0.25, 0.76], [0.3, 0.64], [0.22, 0.52],
+    [0.29, 0.43], [0.2, 0.36], [0.1, 0.3], [0.17, 0.2], [0.25, 0.1]];
+  var PINS = [['서울둘레길', 0.36, 0.5, -1, 30], ['북한산둘레길', 0.41, 0.45, 1, -18], ['강화나들길', 0.25, 0.46, -1, -22],
+    ['해파랑길', 0.8, 0.6, 1, 0], ['소백산자락길', 0.6, 0.6, -1, -30], ['지리산둘레길', 0.5, 0.77, 1, 0],
+    ['변산마실길', 0.3, 0.72, -1, 0], ['남파랑길', 0.65, 0.86, 1, 10], ['제주올레길', 0.4, 0.98, 1, 0]];
+  function mp(u, v) { return [440 + u * 400 - (v - 0.5) * 60, 70 + v * 580]; }
+  function korea(dy, col) {
+    g.beginPath();
+    var n = KR.length;
+    for (var i = 0; i <= n; i++) {
+      var a = mp(KR[i % n][0], KR[i % n][1]), b = mp(KR[(i + 1) % n][0], KR[(i + 1) % n][1]);
+      var mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2 + dy;
+      if (i === 0) g.moveTo(mx, my); else g.quadraticCurveTo(a[0], a[1] + dy, mx, my);
+    }
+    g.closePath(); g.fillStyle = col; g.fill();
+    var j = mp(0.4, 0.98); g.beginPath(); g.ellipse(j[0], j[1] + dy, 34, 15, 0, 0, 7); g.fill();
+  }
+  function scene3(t) {
+    sky('#1767C7', '#6FA9E3', '#2F7FD6');
+    g.strokeStyle = 'rgba(255,255,255,0.18)'; g.lineWidth = 2;
+    for (var w = 0; w < 6; w++) {
+      g.beginPath();
+      for (var x = 0; x <= W; x += 30) g.lineTo(x, 120 + w * 110 + Math.sin(x * 0.02 + t * 2 + w) * 6);
+      g.stroke();
+    }
+    var s = easeOut(prog(t, 0, 0.9));
+    g.save(); g.globalAlpha *= s; g.translate(640, 380); g.scale(0.94 + 0.06 * s, 0.94 + 0.06 * s); g.translate(-640, -380);
+    korea(14, shade(C.forest, -0.35));
+    g.save(); g.shadowColor = 'rgba(21,35,58,0.3)'; g.shadowBlur = 24; g.shadowOffsetY = 10;
+    korea(0, C.forest); g.restore();
+    g.save(); g.globalAlpha *= 0.25; g.translate(-10, -8); korea(0, C.teal); g.restore();
+    korea(4, C.forest);
+    // dotted paths
+    g.setLineDash([4, 12]); g.lineCap = 'round'; g.strokeStyle = C.gold; g.lineWidth = 5;
+    for (var i = 1; i < PINS.length; i++) {
+      var p = prog(t, 1.0 + i * 0.6, 1.5 + i * 0.6); if (p <= 0) continue;
+      var a = mp(PINS[i - 1][1], PINS[i - 1][2]), b = mp(PINS[i][1], PINS[i][2]);
+      g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(lerp(a[0], b[0], p), lerp(a[1], b[1], p)); g.stroke();
+    }
+    g.setLineDash([]);
+    for (i = 0; i < PINS.length; i++) {
+      var k = popPin(t, 0.8 + i * 0.6, 0.5); if (k <= 0) continue;
+      var q = mp(PINS[i][1], PINS[i][2]), side = PINS[i][3];
+      g.save(); g.translate(q[0], q[1]); g.scale(k, k);
+      g.fillStyle = 'rgba(21,35,58,0.25)'; g.beginPath(); g.ellipse(0, 2, 10, 4, 0, 0, 7); g.fill();
+      g.fillStyle = C.sunset; g.beginPath(); g.moveTo(0, 0); g.lineTo(-11, -22); g.lineTo(11, -22); g.fill();
+      ball(0, -28, 14, C.sunset); g.fillStyle = '#fff'; g.beginPath(); g.arc(0, -28, 5, 0, 7); g.fill();
+      var lw = measure(PINS[i][0], 34) + 30;
+      var lx = side > 0 ? 22 : -22 - lw, ly = -54 + PINS[i][4];
+      clay(lx, ly, lw, 54, 14, '#FFFFFF', true);
+      text(PINS[i][0], lx + lw / 2, ly + 28, 34, C.ink, false);
+      g.restore();
+    }
+    g.restore();
+    var h = pop(t, 0.3, 0.8);
+    if (h > 0) {
+      g.save(); g.translate(210, 90); rev(h);
+      clay(-170, -44, 340, 88, 16, C.paper, true);
+      g.fillStyle = C.sunset; g.fillRect(-150, 26, 46, 4);
+      text('전국 둘레길 지도', 0, 0, 42, C.ink, false, 'center', 't'); g.restore();
+    }
+  }
+  /* isometric walk */
+  var TW = 50, TH = 25;
+  function pathI(j) { return 2.2 * Math.sin(j * 0.3); }
+  function block(sx, sy, h, top) {
+    var l = shade(top, -0.18), r = shade(top, -0.32);
+    g.fillStyle = l; g.beginPath(); g.moveTo(sx - TW, sy); g.lineTo(sx, sy + TH); g.lineTo(sx, sy + TH + h); g.lineTo(sx - TW, sy + h); g.fill();
+    g.fillStyle = r; g.beginPath(); g.moveTo(sx + TW, sy); g.lineTo(sx, sy + TH); g.lineTo(sx, sy + TH + h); g.lineTo(sx + TW, sy + h); g.fill();
+    g.fillStyle = top; g.beginPath(); g.moveTo(sx, sy - TH); g.lineTo(sx + TW, sy); g.lineTo(sx, sy + TH); g.lineTo(sx - TW, sy); g.closePath(); g.fill();
+    g.fillStyle = 'rgba(255,255,255,0.08)'; g.beginPath(); g.moveTo(sx, sy - TH); g.lineTo(sx + TW * 0.5, sy - TH * 0.5); g.lineTo(sx, sy); g.lineTo(sx - TW * 0.5, sy - TH * 0.5); g.fill();
+  }
+  function scene4(t) {
+    sky('#1D6DCB', '#D5E7F3', '#6EA8E0');
+    cloud(200 - t * 20, 110, 0.8); cloud(900 - t * 30, 80, 0.6);
+    var cj = lerp(2, 34, easeInOut(prog(t, 0, 7))), ci = pathI(cj);
+    var ox = 640, oy = 430, j0 = Math.floor(cj) - 11, j1 = Math.floor(cj) + 12, i0 = Math.floor(ci) - 11, i1 = Math.floor(ci) + 12;
+    var charD = ci + cj, charDrawn = false;
+    for (var d = i0 + j0; d <= i1 + j1; d++) {
+      if (!charDrawn && d > charD + 0.5) { captain(ox, oy - 10, 0.62, t * 7, 0); kid(ox - 70, oy - 45, 0.62, t * 7 + 1, C.teal, 0); charDrawn = true; }
+      for (var i = i0; i <= i1; i++) {
+        var j = d - i; if (j < j0 || j > j1) continue;
+        var sx = ox + ((j - cj) - (i - ci)) * TW, sy = oy + ((j - cj) + (i - ci)) * TH;
+        if (sx < -80 || sx > W + 80 || sy < -60 || sy > H + 80) continue;
+        var pi = pathI(j), onPath = Math.abs(i - pi) < 0.75 || Math.abs(i - pathI(j - 0.5)) < 0.75;
+        var zone = j < 13 ? 0 : j < 24 ? 1 : 2, hs = hash(i, j), top = '#2F8A5C', h = 18, sea = false;
+        if (zone === 1 && !onPath) {
+          if (i < pi - 0.7) { sea = true; top = C.seaC; h = 8 + Math.sin(t * 4 + i + j) * 4; }
+          else top = '#E6D3A3';
+        }
+        if (onPath) top = '#EDE6D6';
+        block(sx, sy - (sea ? -6 : 0), h, top);
+        if (sea && hs < 0.3) { g.strokeStyle = 'rgba(255,255,255,0.8)'; g.lineWidth = 2.5; g.beginPath(); g.arc(sx, sy + 6 + Math.sin(t * 4 + j) * 3, 10, Math.PI * 1.1, Math.PI * 1.9); g.stroke(); }
+        if (onPath) continue;
+        if (zone === 0 && hs < 0.45) {
+          g.fillStyle = '#5B3A26'; rr(sx - 3, sy - 30, 6, 26, 3); g.fill();
+          var tc = hs < 0.2 ? shade(C.forest, -0.15) : C.forest;
+          g.fillStyle = tc; g.beginPath(); g.moveTo(sx, sy - 82 - hs * 20); g.lineTo(sx + 20 + hs * 8, sy - 22); g.lineTo(sx - 20 - hs * 8, sy - 22); g.closePath(); g.fill();
+          g.fillStyle = 'rgba(0,0,0,0.15)'; g.beginPath(); g.moveTo(sx, sy - 82 - hs * 20); g.lineTo(sx + 20 + hs * 8, sy - 22); g.lineTo(sx, sy - 22); g.closePath(); g.fill();
+        } else if (zone === 2) {
+          if (Math.abs(i - pi - 1.6) < 0.5) { clay(sx - 30, sy - 22, 60, 24, 8, '#8E8A9C'); g.strokeStyle = 'rgba(21,35,58,0.25)'; g.lineWidth = 2; g.beginPath(); g.moveTo(sx, sy - 22); g.lineTo(sx, sy + 2); g.stroke(); }
+          else if (hs < 0.22 && i < pi) {
+            clay(sx - 28, sy - 44, 56, 40, 4, C.paper);
+            g.fillStyle = C.sunset; g.beginPath(); g.moveTo(sx - 40, sy - 40); g.lineTo(sx, sy - 74); g.lineTo(sx + 40, sy - 40); g.closePath(); g.fill();
+            g.fillStyle = C.seaC; rr(sx - 8, sy - 32, 16, 16, 2); g.fill();
+          }
+        } else if (zone === 1 && hs < 0.12 && !sea) { ball(sx, sy - 10, 8, C.magenta); }
+      }
+    }
+    if (!charDrawn) captain(ox, oy - 10, 0.62, t * 7, 0);
+    var caps = [['🌲 숲길', 0.2, C.forest], ['🌊 바닷길', 2.6, C.seaC], ['🏘️ 마을길', 4.8, C.sunset]];
+    for (var c = 0; c < 3; c++) {
+      var k = pop(t, caps[c][1], 0.7), out = prog(t, caps[c][1] + 2.2, caps[c][1] + 2.6);
+      if (c === 2) out = 0;
+      if (k <= 0 || out >= 1) continue;
+      g.save(); g.globalAlpha = 1 - out; g.translate(250 + c * 390, 110 + Math.sin(t * 1.5 + c) * 4); rev(k);
+      clay(-130, -44, 260, 88, 16, '#FFFFFF', true);
+      g.fillStyle = caps[c][2]; rr(-130, -44, 10, 88, 5); g.fill();
+      text(caps[c][0], 6, 2, 42, C.ink, false); g.restore();
+    }
+  }
+  var CONF = []; (function () { for (var i = 0; i < 70; i++) CONF.push([hash(i, 1) * W, hash(i, 2) * 800, 60 + hash(i, 3) * 120, hash(i, 4), [C.sunset, C.gold, C.teal, C.indigo, C.magenta, C.forest][i % 6]]); })();
+  function scene5(t) {
+    hills(9 + Math.min(t, 6) * 0.2, 190);
+    var ph = 0, wv = t + 1;
+    kid(380, 628, 1, ph, KIDS[0], wv); kid(500, 632, 1, ph, KIDS[1], wv + 0.3);
+    kid(790, 632, 1, ph, KIDS[2], wv + 0.6); kid(910, 628, 1, ph, KIDS[3], wv + 0.9);
+    captain(645, 636, 1.15, ph, wv);
+    for (var i = 0; i < CONF.length; i++) {
+      var c = CONF[i], y = ((c[1] + t * c[2]) % 800) - 60, x = c[0] + Math.sin(t * 2 + i) * 20;
+      g.save(); g.globalAlpha = clamp(t * 2, 0, 1) * 0.85; g.translate(x, y); g.rotate(t * 3 * (c[3] - 0.5) + i);
+      g.fillStyle = c[4];
+      if (i % 3 === 0) { g.beginPath(); g.ellipse(0, 0, 8, 4, 0, 0, 7); g.fill(); } else { g.fillRect(-5, -3, 10, 6); }
+      g.restore();
+    }
+    var a = pop(t, 0.3, 0.9), b = pop(t, 2.4, 0.9);
+    if (a > 0) { g.save(); g.translate(640, 140); rev(a); text('자, 함께 출발해 볼까?', 0, 0, 76, '#FFFFFF', null, 'center', 't'); g.restore(); }
+    if (b > 0) {
+      g.save(); g.translate(640, 255 + Math.sin(t * 2.5) * 3); rev(b);
+      clay(-330, -40, 660, 80, 40, C.ink, true);
+      text('▼ 아래로 내려가 둘레길 여행 시작!', 0, 1, 36, C.gold, false); g.restore();
+    }
+  }
+  var SC = [[0, scene1], [5, scene2], [10, scene3], [17, scene4], [24, scene5], [DUR + 1, null]];
+  function drawScene(t) {
+    for (var i = 0; i < 5; i++) {
+      if (t < SC[i + 1][0]) {
+        SC[i][1](t - SC[i][0]);
+        var nb = SC[i + 1][0];
+        if (i < 4 && t > nb - 0.5) {
+          g.save(); g.globalAlpha = easeInOut((t - (nb - 0.5)) / 0.5); SC[i + 1][1](0); g.restore();
+        }
+        return;
+      }
+    }
+    scene5(DUR - 24);
+  }
+  function progress(t) {
+    g.fillStyle = 'rgba(21,35,58,0.2)'; rr(16, H - 12, W - 32, 5, 2.5); g.fill();
+    g.fillStyle = C.sunset; rr(16, H - 12, Math.max(5, (W - 32) * t / DUR), 5, 2.5); g.fill();
+  }
+  function playHint(big) {
+    g.save(); g.fillStyle = 'rgba(21,35,58,' + (big ? 0.16 : 0.18) + ')'; g.fillRect(0, 0, W, H);
+    var r = big ? 52 : 46, cx = 640, cy = big ? 500 : 360;
+    g.shadowColor = 'rgba(21,35,58,0.35)'; g.shadowBlur = 22; g.shadowOffsetY = 6;
+    g.fillStyle = '#fff'; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.fill(); g.shadowColor = 'transparent';
+    g.fillStyle = C.ink; g.beginPath();
+    g.moveTo(cx - r * 0.28, cy - r * 0.42); g.lineTo(cx + r * 0.46, cy); g.lineTo(cx - r * 0.28, cy + r * 0.42); g.closePath(); g.fill();
+    if (big) {
+      text('영상 보기', cx, cy + r + 34, 28, '#FFFFFF', C.ink);
+      // duration badge
+      g.fillStyle = 'rgba(21,35,58,0.72)'; rr(W - 118, 26, 92, 44, 22); g.fill();
+      text('0:30', W - 72, 49, 24, '#FFFFFF', false);
+    }
+    g.restore();
+  }
+  function render(t) {
+    if (!g) return;
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.globalAlpha = 1;
+    if (!started) { scene1(3.6); playHint(true); return; }
+    drawScene(t); progress(t);
+    if (!playing && !ended) playHint(false);
+  }
+
+  /* ---------------- music ---------------- */
+  var BPM = 112, S16 = 60 / BPM / 4, STEPS = Math.floor(DUR / S16);
+  var MEL = [72, 0, 76, 79, 76, 72, 74, 76, 77, 0, 77, 81, 79, 77, 76, 74, 74, 0, 79, 74, 76, 77, 79, 0, 76, 74, 72, 76, 72, 0, 67, 0];
+  var ROOT = [48, 41, 43, 48];
+  var BELLS = [5, 10, 17, 24].map(function (s) { return Math.round(s / S16); });
+  var END = Math.round(28 / S16);
+  function hz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+  function env(node, t, peak, att, dec) {
+    node.gain.setValueAtTime(0.0001, t); node.gain.exponentialRampToValueAtTime(peak, t + att);
+    node.gain.exponentialRampToValueAtTime(0.0001, t + att + dec);
+  }
+  function tone(type, f, t, peak, dec, dest) {
+    var o = actx.createOscillator(), a = actx.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t); o.connect(a); a.connect(dest || bus);
+    env(a, t, peak, 0.005, dec); o.start(t); o.stop(t + dec + 0.05);
+    return o;
+  }
+  function kick(t) {
+    var o = actx.createOscillator(), a = actx.createGain();
+    o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.12);
+    o.connect(a); a.connect(bus); env(a, t, 0.55, 0.003, 0.18); o.start(t); o.stop(t + 0.25);
+  }
+  function hat(t, v) {
+    var s = actx.createBufferSource(), f = actx.createBiquadFilter(), a = actx.createGain();
+    s.buffer = noiseBuf; f.type = 'highpass'; f.frequency.value = 7000;
+    s.connect(f); f.connect(a); a.connect(bus); env(a, t, v, 0.002, 0.05); s.start(t); s.stop(t + 0.08);
+  }
+  function marimba(m, t, v) { tone('sine', hz(m), t, v, 0.38); tone('sine', hz(m) * 4, t, v * 0.18, 0.08); tone('triangle', hz(m), t, v * 0.3, 0.15); }
+  function bell(t) { [84, 88, 91, 96].forEach(function (m, k) { tone('sine', hz(m), t + k * 0.06, 0.12, 1.1); tone('sine', hz(m) * 2.76, t + k * 0.06, 0.03, 0.4); }); }
+  function schedule(n) {
+    var t = startAt + n * S16, bar = Math.floor(n / 16) % 4, inBar = n % 16;
+    if (BELLS.indexOf(n) >= 0) bell(t);
+    if (n === 0) bell(t + 0.02);
+    if (n >= END) {
+      if (n === END) {
+        [48, 60, 64, 67, 72, 76, 79].forEach(function (m, k) { tone(k ? 'triangle' : 'sine', hz(m), t + k * 0.03, k ? 0.07 : 0.2, 2.2); });
+        kick(t); bell(t + 0.2);
+      }
+      return;
+    }
+    var intro = n < 16;
+    if (inBar % 4 === 0) kick(t);
+    if (!intro && inBar % 2 === 0) hat(t + (inBar % 4 === 2 ? 0 : 0.002), inBar % 4 === 2 ? 0.09 : 0.04);
+    if (inBar % 2 === 0) {
+      var r = ROOT[bar], b = (inBar % 4 === 0) ? r : r + ((inBar % 8 === 6) ? 7 : 12);
+      var bo = actx.createOscillator(), ba = actx.createGain(), lp = actx.createBiquadFilter();
+      bo.type = 'triangle'; bo.frequency.setValueAtTime(hz(b), t); lp.type = 'lowpass'; lp.frequency.value = 900;
+      bo.connect(lp); lp.connect(ba); ba.connect(bus); env(ba, t, 0.28, 0.01, 0.22); bo.start(t); bo.stop(t + 0.3);
+      var m = MEL[(Math.floor(n / 2)) % 32];
+      if (m && !intro) {
+        marimba(m, t, 0.22);
+        if (Math.floor(n / 64) % 2 === 1) marimba(m + 12, t + 0.004, 0.06);
+      } else if (intro && inBar % 4 === 0) marimba([60, 64, 67, 72][inBar / 4], t, 0.15);
+    }
+  }
+  function pump() {
+    if (!actx || !playing) return;
+    while (nextStep <= END && startAt + nextStep * S16 < actx.currentTime + 0.15) schedule(nextStep++);
+  }
+  function ensureAudio() {
+    if (actx) return true;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return false;
+    actx = new AC();
+    comp = actx.createDynamicsCompressor(); comp.threshold.value = -16; comp.ratio.value = 4;
+    master = actx.createGain(); master.gain.value = 0.35;
+    master.connect(comp); comp.connect(actx.destination);
+    noiseBuf = actx.createBuffer(1, actx.sampleRate * 0.2, actx.sampleRate);
+    var d = noiseBuf.getChannelData(0); for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    return true;
+  }
+  function newBus() {
+    if (bus) { var old = bus; try { old.gain.cancelScheduledValues(0); old.gain.setValueAtTime(0, actx.currentTime); } catch (e) {} setTimeout(function () { try { old.disconnect(); } catch (e) {} }, 300); }
+    bus = actx.createGain(); bus.connect(master);
+    bus.gain.setValueAtTime(1, startAt + 28.2); bus.gain.linearRampToValueAtTime(0.0001, startAt + DUR);
+  }
+
+  /* ---------------- clock & loop ---------------- */
+  function now() { return actx ? actx.currentTime : (fbClock ? fbClock.acc + (playing ? (performance.now() - fbClock.t0) / 1000 : 0) : 0); }
+  function curTime() { if (!started) return 0; if (ended) return DUR; return clamp(now() - startAt, 0, DUR); }
+  function frame() {
+    rafId = 0; if (!playing) return;
+    pump();
+    var t = curTime();
+    if (t >= DUR) { finish(); return; }
+    render(t);
+    if (typeof api.onTime === 'function') api.onTime(t, DUR);
+    rafId = requestAnimationFrame(frame);
+  }
+  function startLoop() {
+    if (!rafId) rafId = requestAnimationFrame(frame);
+    if (!schedTimer) schedTimer = setInterval(pump, 25);
+  }
+  function stopLoop() {
+    if (rafId) cancelAnimationFrame(rafId); rafId = 0;
+    if (schedTimer) clearInterval(schedTimer); schedTimer = 0;
+  }
+  function finish() {
+    playing = false; ended = true; stopLoop(); render(DUR);
+    if (typeof api.onTime === 'function') api.onTime(DUR, DUR);
+    if (actx) setTimeout(function () { if (!playing && actx) actx.suspend(); }, 400);
+  }
+
+  var api = {
+    onTime: null,
+    mount: function (cv) {
+      canvas = cv; g = cv.getContext('2d');
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = W * dpr; cv.height = H * dpr;
+      render(0);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (!playing) render(curTime()); });
+      return api;
+    },
+    play: function () {
+      if (playing) return;
+      if (!started || ended) { api.restart(); return; }
+      playing = true;
+      if (actx) actx.resume(); else if (fbClock) fbClock.t0 = performance.now();
+      startLoop();
+    },
+    pause: function () {
+      if (!playing) return;
+      playing = false; stopLoop();
+      if (actx) actx.suspend(); else if (fbClock) fbClock.acc += (performance.now() - fbClock.t0) / 1000;
+      render(curTime());
+    },
+    toggle: function () { if (playing) api.pause(); else api.play(); },
+    restart: function () {
+      stopLoop();
+      if (ensureAudio()) {
+        actx.resume();
+        startAt = actx.currentTime + 0.08; newBus();
+      } else { fbClock = { acc: 0, t0: performance.now() }; startAt = 0; }
+      nextStep = 0; started = true; ended = false; playing = true;
+      startLoop();
+    },
+    get playing() { return playing; },
+    get time() { return curTime(); }
+  };
+  window.TrailFilm = api;
+})();
+
+</script>
+<script>
+/* 가볍고 경쾌한 배경음악: 실로폰 멜로디 + 통통 베이스 + 셰이커 (Web Audio로 직접 만듦) */
+(function () {
+  var BPM = 126, BEAT = 60 / BPM, STEP = BEAT / 2;           // 8분음표 단위
+  var ac = null, out = null, timer = null, next = 0, step = 0, on = false, noiseBuf = null;
+
+  // 음 이름 → 주파수 (C4 = 60)
+  function f(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+  // 코드 진행: C - G - Am - F (2마디씩)
+  var CHORDS = [[48, 60, 64, 67], [43, 59, 62, 67], [45, 60, 64, 69], [41, 60, 65, 69]];
+  // 8마디 멜로디 (8분음표 64칸, 0 = 쉼표) — 깡총깡총 뛰는 느낌
+  var MEL = [
+    72, 0, 76, 79, 76, 0, 72, 0,   74, 0, 76, 74, 72, 0, 0, 0,
+    71, 0, 74, 79, 74, 0, 71, 0,   72, 74, 76, 0, 74, 0, 0, 0,
+    72, 0, 76, 81, 79, 0, 76, 0,   79, 0, 81, 79, 76, 0, 72, 0,
+    77, 0, 76, 74, 72, 0, 74, 0,   72, 0, 0, 79, 84, 0, 0, 0
+  ];
+
+  function bell(t, freq, vol) {                 // 실로폰/글로켄 느낌
+    [1, 4.0].forEach(function (mul, i) {
+      var o = ac.createOscillator(), g = ac.createGain();
+      o.type = 'sine'; o.frequency.value = freq * mul;
+      var v = i ? vol * 0.18 : vol, d = i ? 0.12 : 0.45;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + 0.005);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      o.connect(g); g.connect(out); o.start(t); o.stop(t + d + 0.05);
+    });
+  }
+  function pluck(t, freq, vol, dur) {            // 통통 튀는 베이스/우쿨렐레
+    var o = ac.createOscillator(), g = ac.createGain(), lp = ac.createBiquadFilter();
+    o.type = 'triangle'; o.frequency.value = freq;
+    lp.type = 'lowpass'; lp.frequency.setValueAtTime(2400, t); lp.frequency.exponentialRampToValueAtTime(400, t + dur);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(lp); lp.connect(g); g.connect(out); o.start(t); o.stop(t + dur + 0.05);
+  }
+  function shaker(t, vol) {
+    var s = ac.createBufferSource(), g = ac.createGain(), hp = ac.createBiquadFilter();
+    s.buffer = noiseBuf; hp.type = 'highpass'; hp.frequency.value = 7000;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+    s.connect(hp); hp.connect(g); g.connect(out); s.start(t); s.stop(t + 0.08);
+  }
+
+  function schedule() {
+    while (next < ac.currentTime + 0.15) {
+      var i = step % 64, ch = CHORDS[Math.floor(i / 16)];
+      if (MEL[i]) bell(next, f(MEL[i]), 0.22);
+      if (i % 4 === 0) pluck(next, f(ch[0]), 0.32, 0.28);            // 베이스: 1·3박
+      if (i % 4 === 2) pluck(next, f(ch[0] + 7), 0.22, 0.2);         // 5도 통통
+      if (i % 2 === 1) {                                              // 엇박 우쿨렐레 코드
+        for (var k = 1; k < 4; k++) pluck(next + k * 0.012, f(ch[k]), 0.07, 0.18);
+      }
+      shaker(next, i % 2 ? 0.05 : 0.025);
+      next += STEP; step++;
+    }
+  }
+
+  function start() {
+    if (!ac) {
+      ac = new (window.AudioContext || window.webkitAudioContext)();
+      var comp = ac.createDynamicsCompressor(); comp.connect(ac.destination);
+      out = ac.createGain(); out.gain.value = 0; out.connect(comp);
+      noiseBuf = ac.createBuffer(1, ac.sampleRate * 0.1, ac.sampleRate);
+      var d = noiseBuf.getChannelData(0); for (var j = 0; j < d.length; j++) d[j] = Math.random() * 2 - 1;
+    }
+    ac.resume();
+    if (on) return; on = true;
+    next = ac.currentTime + 0.05;
+    out.gain.cancelScheduledValues(ac.currentTime);
+    out.gain.setTargetAtTime(0.5, ac.currentTime, 0.4);              // 살살 커지기
+    clearInterval(timer); timer = setInterval(schedule, 40); schedule();
+  }
+  function stop() {
+    if (!on) return; on = false;
+    out.gain.cancelScheduledValues(ac.currentTime);
+    out.gain.setTargetAtTime(0, ac.currentTime, 0.15);               // 살살 작아지기
+    var t = timer; setTimeout(function () { if (!on) clearInterval(t); }, 600);
+  }
+
+  window.BGM = {
+    start: start, stop: stop,
+    toggle: function () { on ? stop() : start(); return on; },
+    get playing() { return on; }
+  };
+})();
+
+</script>
+<script>
+/* 둘레길 가는 길에 들르는 유명 고속도로 휴게소 */
+window.REST_AREAS = [
+  { id:'deokpyeong', name:'덕평자연휴게소', road:'영동고속도로', region:'경기 이천', emoji:'🌳', color:'#9EE6C4', mapX:44, mapY:30,
+    oneLine:'숲속에 쏙 들어앉은 산책 휴게소',
+    story:'이름에 "자연"이 들어갈 만큼 나무가 많아요. 휴게소 안에 숲 산책길이 있어서 차에서 내려 기지개를 켜고 걷기 좋아요.',
+    yum:'다양한 간식 코너', see:['숲 산책길','반려견 놀이터'], nearTrail:'강릉바우길' },
+  { id:'haengdamdo', name:'행담도휴게소', road:'서해안고속도로', region:'충남 당진', emoji:'🌉', color:'#BFE6FF', mapX:30, mapY:35,
+    oneLine:'바다 위 다리 한가운데 섬에 있는 휴게소',
+    story:'서해대교를 달리다 보면 바다 한가운데 작은 섬 "행담도"가 나와요. 휴게소가 바로 그 섬 위에 있어서 바다와 커다란 다리를 가까이서 볼 수 있어요.',
+    yum:'바다 구경하며 먹는 간식', see:['서해대교','서해 바다'], nearTrail:'변산마실길' },
+  { id:'geumgang', name:'금강휴게소', road:'경부고속도로', region:'충북 옥천', emoji:'🏞️', color:'#9ED9C0', mapX:48, mapY:44,
+    oneLine:'반짝이는 금강이 내려다보이는 강가 휴게소',
+    story:'휴게소 바로 옆으로 금강이 흘러요. 강가 쉼터에 앉아 물결을 보고 있으면 마음까지 시원해져요.',
+    yum:'도리뱅뱅이(작은 민물고기를 동그랗게 돌려 담아 튀긴 음식)', see:['금강 강물','강변 쉼터'], nearTrail:'남파랑길' },
+  { id:'seomjingang', name:'섬진강휴게소', road:'남해고속도로', region:'전남 광양', emoji:'🐚', color:'#FFD6A5', mapX:47, mapY:68,
+    oneLine:'맑은 섬진강 옆, 재첩이 유명한 휴게소',
+    story:'섬진강은 물이 맑기로 유명한 강이에요. 이 강에는 "재첩"이라는 아주 작은 조개가 살아서, 재첩국이 이 동네 자랑거리예요.',
+    yum:'재첩국(작은 조개로 끓인 맑은 국)', see:['섬진강','강 건너 산'], nearTrail:'지리산둘레길' },
+  { id:'jeongan', name:'정안알밤휴게소', road:'논산천안고속도로', region:'충남 공주', emoji:'🌰', color:'#E8C39E', mapX:38, mapY:41,
+    oneLine:'이름부터 고소한 알밤 휴게소',
+    story:'공주 정안은 밤나무가 많고 밤이 맛있기로 유명한 곳이에요. 그래서 휴게소 이름에도 "알밤"이 들어갔대요.',
+    yum:'알밤으로 만든 간식', see:['알밤 조형물','공주 알밤 자랑'], nearTrail:'변산마실길' },
+  { id:'hoengseong', name:'횡성휴게소', road:'영동고속도로', region:'강원 횡성', emoji:'🐮', color:'#FFB3A7', mapX:55, mapY:26,
+    oneLine:'한우로 유명한 횡성의 휴게소',
+    story:'횡성은 "횡성한우"로 이름난 고장이에요. 강원도 바다로 가는 길에 쉬어 가는 곳이라, 둘레길 여행 가는 가족들이 많이 들러요.',
+    yum:'한우 음식', see:['강원도 산자락','소 조형물'], nearTrail:'강릉바우길' },
+  { id:'gapyeong', name:'가평휴게소', road:'서울양양고속도로', region:'경기 가평', emoji:'🚣', color:'#C9B6FF', mapX:46, mapY:20,
+    oneLine:'북한강이 한눈에 보이는 전망 휴게소',
+    story:'높은 곳에 있어서 아래로 굽이굽이 흐르는 북한강이 내려다보여요. 동해 바다로 가는 길에 멋진 풍경을 보며 쉬어 갈 수 있어요.',
+    yum:'강 풍경과 함께 먹는 간식', see:['북한강 전망','전망 데크'], nearTrail:'해파랑길' },
+  { id:'ipjang', name:'입장거봉포도휴게소', road:'경부고속도로', region:'충남 천안', emoji:'🍇', color:'#B9A2F0', mapX:39, mapY:34,
+    oneLine:'알이 굵은 거봉포도 마을의 휴게소',
+    story:'천안 입장은 알이 크고 달콤한 "거봉포도"로 유명한 마을이에요. 그래서 휴게소 이름에 포도가 들어갔어요.',
+    yum:'거봉포도(제철 여름~가을)', see:['포도 조형물','포도 마을 자랑'], nearTrail:'남파랑길' }
+];
+window.REST_TIPS = [
+  { emoji:'⏰', title:'2시간마다 쉬어요', text:'오래 타면 운전하는 어른도 피곤해져요. 2시간쯤 달리면 휴게소에서 쉬어 가요.' },
+  { emoji:'🤸', title:'몸을 쭉쭉 펴요', text:'차에서 내려 기지개를 켜고 조금 걸으면 몸이 개운해져요.' },
+  { emoji:'🚸', title:'주차장에선 손잡고', text:'휴게소 주차장은 차가 많이 다녀요. 꼭 어른 손을 잡고 걸어요.' }
+];
+
+</script>
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const T=window.TRAILS||[], C=window.CAPTAIN||{}, R=window.REST_AREAS||[];
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const stars=n=>'<span class="dots" aria-label="난이도 '+n+'/3">'+'●'.repeat(n)+'<i>'+'●'.repeat(3-n)+'</i></span>';
+/* 선 아이콘 (Lucide 스타일) */
+const ICONS={mountain:'<path d="m8 3 4 8 5-5 5 15H2L8 3z"/>',route:'<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',map:'<path d="M14.1 5.6a2 2 0 0 0 1.8 0l3.7-1.9A1 1 0 0 1 21 4.6v12.8a1 1 0 0 1-.6.9l-4.5 2.3a2 2 0 0 1-1.8 0l-4.2-2.1a2 2 0 0 0-1.8 0l-3.7 1.8A1 1 0 0 1 3 19.4V6.6a1 1 0 0 1 .6-.9l4.5-2.3a2 2 0 0 1 1.8 0z"/><path d="M15 5.8v15M9 3.2v15"/>',car:'<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>',help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>',book:'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',compass:'<circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3z"/>',shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/>',flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/>',award:'<circle cx="12" cy="8" r="6"/><path d="M15.5 12.9 17 22l-5-3-5 3 1.5-9.1"/>',pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',trees:'<path d="M10 10v.2A3 3 0 0 1 8.9 16H5a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0ZM7 16v6M13 19v3"/><path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5"/>',utensils:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',eye:'<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',sparkle:'<path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/>',bulb:'<path d="M9 18h6M10 22h4M15.1 14c.2-1 .7-1.7 1.4-2.5A4.6 4.6 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/>',tag:'<path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"/><circle cx="7.5" cy="7.5" r="1"/>',hand:'<path d="M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.4l-3.6-3.6a2 2 0 0 1 2.8-2.8L7 15"/>'};
+const ic=n=>'<span class="ico">'+(ICONS[n]?'<svg viewBox="0 0 24 24">'+ICONS[n]+'</svg>':'')+'</span>';
+document.querySelectorAll('[data-i]').forEach(el=>{const n=el.dataset.i;if(ICONS[n])el.innerHTML='<svg viewBox="0 0 24 24">'+ICONS[n]+'</svg>';el.classList.add('ico')});
+const diffTxt=['','쉬워요','보통이에요','조금 힘들어요'];
+
+/* ---------- stamps (per-viewer convenience) ---------- */
+let stamps=new Set();
+try{stamps=new Set(JSON.parse(localStorage.getItem('dulle-stamps')||'[]'))}catch(e){}
+function saveStamps(){try{localStorage.setItem('dulle-stamps',JSON.stringify([...stamps]))}catch(e){}
+  $('#stampCount').textContent=stamps.size+'/'+T.length;$('#certStamps').textContent=stamps.size+' / '+T.length;
+  $('#certMsg').textContent=stamps.size>=T.length?'열두 길을 모두 완주했어요! 정말 멋진 탐험가예요. 이제 가족과 함께 진짜 둘레길을 걸어 보세요.':stamps.size?'벌써 '+stamps.size+'개의 길을 걸었어요. 끝까지 함께 걸어 줘서 고마워요. 다음에는 가족과 함께 진짜 둘레길을 걸어 보세요.':'아직 받은 스탬프가 없어요. STEP 06에서 둘레길 카드를 눌러 한 걸음씩 걸어 보세요.';
+  document.querySelectorAll('.tcard').forEach(c=>c.classList.toggle('stamped',stamps.has(c.dataset.id)));}
+
+/* ---------- film ---------- */
+const film=$('#film'), F=window.TrailFilm; let wasPlaying=false;
+function fmt(t){t=Math.max(0,Math.floor(t));return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')}
+/* 배경음악: 영상이 나올 땐 잠시 쉬었다가, 영상이 멈추면 다시 흘러요 */
+const B=window.BGM; let wantBgm=false;
+function syncBgm(){if(!B)return;const film=F&&F.playing;if(wantBgm&&!film)B.start();else B.stop();
+  $('#bgmBtn').classList.toggle('on',wantBgm);$('#bgmBtn').setAttribute('aria-pressed',wantBgm);
+  $('#bgmTxt').textContent=!wantBgm?'경쾌한 음악 켜기':(film?'영상 끝나면 다시 나와요':'음악 끄기');}
+$('#bgmBtn').onclick=()=>{wantBgm=!wantBgm;syncBgm()};
+function syncBtn(){const p=F&&F.playing;film.classList.toggle('playing',!!p);if(p)film.classList.remove('ended');if(wasPlaying&&!p&&F.time>=29.5)film.classList.add('ended');wasPlaying=!!p;$('#btnPlay').classList.toggle('on',!p);$('#btnPlay').textContent=p?'⏸ 멈춤':'▶ 재생';syncBgm();}
+if(F){
+  F.mount($('#filmCanvas'));
+  F.onTime=(t,d)=>{$('#filmTime').textContent=fmt(t)+' / '+fmt(d||30)+(F.playing?' · 음악 재생 중':'');if(!F.playing)syncBtn();};
+  const go=()=>{F.toggle();setTimeout(syncBtn,30)};
+  $('#bigPlay').onclick=go;$('#btnPlay').onclick=go;$('#filmCanvas').onclick=go;
+  $('#btnRestart').onclick=()=>{F.restart();setTimeout(syncBtn,30)};
+}
+
+/* ---------- captain ---------- */
+if(C.name)$('#capName').textContent=C.name+' 대장님 · '+(C.title||'산악인');
+$('#capFacts').innerHTML=(C.facts||[]).map((f,i)=>'<li><span class="n">'+(i+1)+'</span><span>'+esc(f)+'</span></li>').join('');
+$('#capLesson').innerHTML='<b>산에서 배운 마음</b><br>'+esc(C.lesson||'');
+$('#peaks').innerHTML=Array.from({length:16},(_,i)=>'<span style="animation-delay:'+(i*.06)+'s">'+(i+1)+'</span>').join('');
+
+/* ---------- scenery: 층층이 겹친 SVG 풍경화 ---------- */
+const SCN={
+  sea:     {sky:['#1F6FD1','#7CCBFF','#FFE2B0'],sun:'#FFD25E',hills:['#3BA7A0','#1C7F86','#0F5C68'],water:['#14A3C7','#0A5E80']},
+  forest:  {sky:['#3DA8E8','#9EDDFF','#E6F8FF'],sun:'#FFE07A',hills:['#5CC28A','#249766','#0E6B47'],tree:'#0A4B33'},
+  mountain:{sky:['#3A3F94','#E9788A','#FFD08F'],sun:'#FFE2A6',hills:['#6C6FC0','#4A4F9E','#2B2F6E'],snow:'#F4F1FF'},
+  village: {sky:['#FF9C5B','#FFC77E','#FFF0C9'],sun:'#FFF2C2',hills:['#9BCF5F','#5CAE4C','#2F8040'],roof:'#2A2F4F'},
+  city:    {sky:['#252A73','#C95C93','#FFB878'],sun:'#FFD7A0',hills:['#5A4F9B','#3A3577','#1D1F4D'],win:'#FFD36E'},
+  river:   {sky:['#2E9BE0','#9ADDFF','#EAF9FF'],sun:'#FFE07A',hills:['#6FCB8F','#33A06A','#17734C'],water:['#36B4E8','#1272A8']}
+};
+let scnId=0;
+function scene(kind,seed){
+  const P=SCN[kind]||SCN.forest, id='s'+(scnId++);
+  const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280};
+  const ridge=(y,amp,f)=>{let d='M0 200 L0 '+y;const ph=rnd()*6;for(let x=0;x<=400;x+=20){const yy=y-Math.abs(Math.sin(x/400*Math.PI*f+ph))*amp-Math.sin(x/37+ph)*amp*.12;d+=' L'+x+' '+yy.toFixed(1)}return d+' L400 200 Z'};
+  let s='<svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><defs>'+
+    '<linearGradient id="'+id+'k" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+P.sky[0]+'"/><stop offset=".6" stop-color="'+P.sky[1]+'"/><stop offset="1" stop-color="'+P.sky[2]+'"/></linearGradient>'+
+    '<radialGradient id="'+id+'g"><stop offset="0" stop-color="'+P.sun+'" stop-opacity=".9"/><stop offset="1" stop-color="'+P.sun+'" stop-opacity="0"/></radialGradient>'+
+    '<linearGradient id="'+id+'h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'+
+    (P.water?'<linearGradient id="'+id+'w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+P.water[0]+'"/><stop offset="1" stop-color="'+P.water[1]+'"/></linearGradient>':'')+
+    '</defs><rect width="400" height="200" fill="url(#'+id+'k)"/>';
+  const sx=240+rnd()*110, sy=kind==='mountain'||kind==='city'||kind==='village'?120:46;
+  s+='<circle cx="'+sx+'" cy="'+sy+'" r="70" fill="url(#'+id+'g)"/><circle cx="'+sx+'" cy="'+sy+'" r="17" fill="'+P.sun+'"/>';
+  for(let i=0;i<3;i++){const cx=rnd()*360,cy=20+rnd()*40;s+='<path d="M'+cx+' '+cy+' q6 -5 12 0 q6 -5 12 0" stroke="#fff" stroke-opacity=".75" stroke-width="1.6" fill="none" stroke-linecap="round" transform="scale(.8) translate('+cx*.25+' '+cy*.25+')"/>'}
+  // 먼 산 → 가까운 산 (뒤로 갈수록 흐릿하게)
+  s+='<path d="'+ridge(118,60,1.6)+'" fill="'+P.hills[0]+'" opacity=".75"/>';
+  if(P.snow)s+='<path d="'+ridge(118,60,1.6)+'" fill="url(#'+id+'h)"/>';
+  if(kind==='city'){for(let x=8;x<400;x+=22+rnd()*10){const h=40+rnd()*70,w=14+rnd()*10;s+='<rect x="'+x+'" y="'+(170-h)+'" width="'+w+'" height="'+h+'" rx="2" fill="'+P.hills[2]+'"/>';
+      for(let wy=170-h+6;wy<160;wy+=9)for(let wx=x+3;wx<x+w-3;wx+=6)if(rnd()>.45)s+='<rect x="'+wx+'" y="'+wy+'" width="2.6" height="3.6" fill="'+P.win+'" opacity=".9"/>';}}
+  s+='<path d="'+ridge(148,42,2.3)+'" fill="'+P.hills[1]+'"/>';
+  if(P.water){s+='<rect y="150" width="400" height="50" fill="url(#'+id+'w)"/>';
+    for(let i=0;i<9;i++){const y=156+i*5,x=rnd()*330;s+='<path d="M'+x+' '+y+' h'+(20+rnd()*50)+'" stroke="#fff" stroke-opacity="'+(.55-i*.05)+'" stroke-width="1.4" stroke-linecap="round"/>'}
+    s+='<path d="M'+(sx-30)+' 154 h60 M'+(sx-18)+' 160 h36 M'+(sx-8)+' 166 h16" stroke="'+P.sun+'" stroke-width="2" stroke-linecap="round" opacity=".8"/>';
+  }else s+='<path d="'+ridge(178,26,1.2)+'" fill="'+P.hills[2]+'"/>';
+  if(kind==='forest'||kind==='mountain'||kind==='river'){const c=P.tree||P.hills[2];for(let i=0;i<14;i++){const x=rnd()*400,b=176+rnd()*20,h=18+rnd()*22;s+='<path d="M'+x+' '+(b-h)+' l'+(h*.32)+' '+h+' h-'+(h*.64)+' Z" fill="'+(kind==='mountain'?'#1B1E4F':c)+'" opacity=".95"/>'}}
+  if(kind==='village'){for(let i=0;i<4;i++){const x=40+i*90+rnd()*30,y=172+rnd()*6;s+='<rect x="'+(x-16)+'" y="'+(y-12)+'" width="32" height="14" fill="#FFF4DE"/><path d="M'+(x-26)+' '+(y-10)+' Q'+x+' '+(y-30)+' '+(x+26)+' '+(y-10)+' Q'+x+' '+(y-18)+' '+(x-26)+' '+(y-10)+'Z" fill="'+P.roof+'"/>'}}
+  // 걷는 길 (점선)
+  s+='<path d="M-10 196 C 90 '+(170+rnd()*10)+', 200 '+(198)+', 410 '+(176+rnd()*10)+'" stroke="#FFF7E8" stroke-width="3" stroke-dasharray="7 7" fill="none" stroke-linecap="round" opacity=".9"/>';
+  return '<div class="scn">'+s+'</svg></div>';
+}
+
+
+/* ---------- 3D map ---------- */
+const board=$('#board'), stage=$('#stage');
+$('#pins').innerHTML=T.map((t,i)=>'<div class="pin" data-i="'+i+'" style="left:'+t.mapX+'%;top:'+t.mapY+'%"><div class="shadow"></div><div class="pole"></div><div class="head"><div class="ball" style="--c:'+t.color+'">'+t.emoji+'</div><div class="lbl">'+esc(t.name)+'</div></div></div>').join('')+
+  R.map((r,i)=>'<div class="pin rest" data-r="'+i+'" style="left:'+r.mapX+'%;top:'+r.mapY+'%"><div class="shadow"></div><div class="pole"></div><div class="head"><div class="ball">'+r.emoji+'</div><div class="lbl">'+esc(r.name.replace('휴게소',''))+'</div></div></div>').join('');
+const baseX=52, baseZ=-22; let sc=innerWidth<860?' scale(.6)':'';
+stage.addEventListener('pointermove',e=>{const b=stage.getBoundingClientRect();const x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;
+  board.style.transform='rotateX('+(baseX-y*14)+'deg) rotateZ('+(baseZ+x*20)+'deg)'+sc;
+  document.querySelectorAll('.pin .head').forEach(h=>h.style.transform='translate(-50%,0) rotateZ('+(-(baseZ+x*20))+'deg) rotateX('+(-(baseX-y*14))+'deg) translateY('+(h.parentNode.classList.contains('rest')?-30:-46)+'px)');});
+stage.addEventListener('pointerleave',()=>{board.style.transform='';document.querySelectorAll('.pin .head').forEach(h=>h.style.transform='')});
+function showDetail(i){const t=T[i];document.querySelectorAll('.pin').forEach(p=>p.classList.toggle('sel',+p.dataset.i===i));
+  $('#detail').innerHTML='<span class="kicker">TRAIL · '+String(i+1).padStart(2,'0')+'</span><h3 style="font-size:30px;margin:4px 0 2px">'+esc(t.name)+'</h3><div style="color:var(--ink2)">'+ic('pin')+' '+esc(t.region)+'</div><p style="margin:10px 0">'+esc(t.oneLine)+'</p>'+
+  '<div class="stat"><div><b>'+esc(t.length)+'</b><small>길이</small></div><div><b>'+esc(t.courses)+'</b><small>코스</small></div><div><b>'+esc(t.bestSeason)+'</b><small>좋은 계절</small></div></div>'+
+  (t.type||[]).map(x=>'<span class="tag">'+esc(x)+'</span>').join('')+'<div class="diff" style="margin:12px 0">난이도 '+stars(t.difficulty)+' '+diffTxt[t.difficulty]+'</div><button class="pill on" data-walk="'+i+'">'+ic('route')+' 이 길 걸어 보기</button>';}
+function showRest(i){const r=R[i];document.querySelectorAll('.pin').forEach(p=>p.classList.toggle('sel',p.dataset.r==i));
+  $('#detail').innerHTML='<span class="kicker">REST AREA · '+esc(r.road)+'</span><h3 style="font-size:30px;margin:4px 0 2px">'+esc(r.name)+'</h3><div style="color:var(--ink2)">'+ic('pin')+' '+esc(r.region)+'</div><p style="margin:10px 0">'+esc(r.story)+'</p>'+
+  '<div class="rcard"><div class="yum">'+ic('utensils')+'<span>'+esc(r.yum)+'</span></div></div><p style="margin:12px 0 4px">'+r.see.map(s=>'<span class="tag">'+esc(s)+'</span>').join('')+'</p><p class="diff">가는 길에 갈 수 있는 둘레길: <b>'+esc(r.nearTrail)+'</b></p>';}
+$('#pins').addEventListener('click',e=>{const p=e.target.closest('.pin');if(!p)return;if(p.dataset.r!=null)showRest(+p.dataset.r);else showDetail(+p.dataset.i)});
+document.querySelector('.maptoggle').addEventListener('click',e=>{const b=e.target.closest('[data-mt]');if(!b)return;b.classList.toggle('on');stage.classList.toggle('no-'+b.dataset.mt,!b.classList.contains('on'))});
+document.querySelector('.maptoggle').addEventListener('pointermove',e=>e.stopPropagation());
+$('#detail').addEventListener('click',e=>{const b=e.target.closest('[data-walk]');if(b)openWalk(+b.dataset.walk)});
+
+/* ---------- cards + filters ---------- */
+const types=['전체',...new Set(T.flatMap(t=>t.type||[]))]; let cur='전체';
+function renderFilters(){$('#filters').innerHTML=types.map(x=>'<button class="pill'+(x===cur?' on':'')+'" data-f="'+esc(x)+'">'+esc(x)+'</button>').join('')}
+function renderGrid(){$('#grid').innerHTML=T.map((t,i)=>({t,i})).filter(o=>cur==='전체'||(o.t.type||[]).includes(cur)).map(({t,i})=>
+  '<article class="tcard reveal in" data-i="'+i+'" data-id="'+esc(t.id)+'"><div class="scene">'+scene(t.scenery,i*7+3)+'</div><span class="num">'+String(i+1).padStart(2,'0')+'</span><span class="got">'+ic('award')+' 완주</span><div class="em" style="--c:'+t.color+'">'+t.emoji+'</div><div class="body"><h3>'+esc(t.name)+'</h3><p>'+esc(t.oneLine)+'</p><div class="diff">'+ic('pin')+' '+esc(t.region)+' · '+esc(t.length)+'<br>난이도 '+stars(t.difficulty)+' '+diffTxt[t.difficulty]+'</div></div></article>').join('');saveStamps();}
+$('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(!b)return;cur=b.dataset.f;renderFilters();renderGrid()});
+$('#grid').addEventListener('click',e=>{const c=e.target.closest('.tcard');if(c)openWalk(+c.dataset.i)});
+$('#grid').addEventListener('pointermove',e=>{const c=e.target.closest('.tcard');if(!c)return;const b=c.getBoundingClientRect();const x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;c.style.transform='rotateY('+(x*10)+'deg) rotateX('+(-y*10)+'deg) translateZ(10px)'});
+$('#grid').addEventListener('pointerout',e=>{const c=e.target.closest('.tcard');if(c&&!c.contains(e.relatedTarget))c.style.transform=''});
+renderFilters();renderGrid();
+
+/* ---------- walk mode ---------- */
+const dlg=$('#walk'); let W=null, step=0;
+const STEPS=[
+  t=>'<h3>'+ic('hand')+esc(t.name)+'에 온 걸 환영해요</h3><p>'+esc(t.story)+'</p><div class="stat"><div><b>'+esc(t.length)+'</b><small>길이</small></div><div><b>'+esc(t.courses)+'</b><small>코스</small></div><div><b>'+esc(t.bestSeason)+'</b><small>좋은 계절</small></div></div>',
+  t=>'<h3>'+ic('tag')+'이름에 담긴 이야기</h3><p style="font-size:20px">'+esc(t.nameStory)+'</p>',
+  t=>'<h3>'+ic('eye')+'걷다 보면 이런 걸 볼 수 있어요</h3><div class="seeg">'+(t.see||[]).map((s,i)=>'<div style="animation-delay:'+(i*.12)+'s">'+ic(['eye','trees','mountain','sparkle'][i%4])+esc(s)+'</div>').join('')+'</div>',
+  t=>'<h3>'+ic('bulb')+'우와, 이런 사실이!</h3><ul>'+(t.funFacts||[]).map(f=>'<li>'+ic('sparkle')+'<span>'+esc(f)+'</span></li>').join('')+'</ul>',
+  t=>'<h3>'+ic('compass')+'탐험 팁</h3><p class="bubble">'+esc(String(t.tip).replace(/^탐험 팁:\s*/,''))+'</p><div class="seal">'+esc(t.name)+'<br>완주</div><p style="text-align:center;font-weight:700;font-size:20px">'+esc(t.name)+' 완주 스탬프를 받았어요!</p>'
+];
+function drawWalk(){const t=W;$('#wSteps').innerHTML=STEPS.map((_,i)=>'<i class="'+(i<=step?'on':'')+'"></i>').join('');
+  $('#wContent').innerHTML=STEPS[step](t);$('#wContent').scrollTop=0;
+  $('#wTop .hiker2').style.left=(8+step*19)+'%';
+  $('#wTop .scn').style.transform='translateX(-'+(step*4)+'%) scale(1.15)';
+  $('#wPrev').style.visibility=step?'visible':'hidden';
+  $('#wNext').textContent=step===STEPS.length-1?'다른 길 보러 가기 ✔':'한 걸음 더 ▶';
+  if(step===STEPS.length-1){stamps.add(t.id);saveStamps();}}
+function openWalk(i){W=T[i];step=0;$('#wTop').innerHTML=scene(W.scenery,i*7+3)+'<div class="title">'+esc(W.name)+'</div><span class="hiker2"></span><button class="x" aria-label="닫기">✕</button>';
+  $('#wTop .x').onclick=()=>dlg.close();drawWalk();dlg.showModal();}
+$('#wNext').onclick=()=>{if(step<STEPS.length-1){step++;drawWalk()}else dlg.close()};
+$('#wPrev').onclick=()=>{if(step>0){step--;drawWalk()}};
+dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
+
+/* ---------- rest areas ---------- */
+$('#restTips').innerHTML=(window.REST_TIPS||[]).map(t=>'<div class="clay reveal"><div class="e" style="background:var(--tint-sea)">'+t.emoji+'</div><h4>'+esc(t.title)+'</h4><p>'+esc(t.text)+'</p></div>').join('');
+$('#restGrid').innerHTML=R.map((r,i)=>'<article class="tcard rcard reveal in" data-r="'+i+'"><div class="top" style="background:linear-gradient(150deg,'+r.color+',color-mix(in srgb,'+r.color+' 55%,#15233A))"><small>'+esc(r.road)+'</small>'+ic('utensils')+'</div><div class="body"><h3>'+esc(r.name)+'</h3><p>'+esc(r.oneLine)+'</p><div class="diff">'+ic('pin')+' '+esc(r.region)+'</div><div class="yum">'+ic('utensils')+'<span>'+esc(r.yum)+'</span></div><div class="near">가는 길 둘레길 · <b>'+esc(r.nearTrail)+'</b></div><button class="pill" data-rmap="'+i+'" style="margin-top:12px">'+ic('map')+' 지도에서 보기</button></div></article>').join('');
+$('#restGrid').addEventListener('click',e=>{const b=e.target.closest('[data-rmap]');if(!b)return;$('#map').scrollIntoView();showRest(+b.dataset.rmap)});
+$('#restGrid').addEventListener('pointermove',e=>{const c=e.target.closest('.tcard');if(!c)return;const b=c.getBoundingClientRect();const x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;c.style.transform='rotateY('+(x*12)+'deg) rotateX('+(-y*12)+'deg)'});
+$('#restGrid').addEventListener('pointerout',e=>{const c=e.target.closest('.tcard');if(c&&!c.contains(e.relatedTarget))c.style.transform=''});
+if(window.QUIZ&&R.length){QUIZ.push({q:'바다 위 서해대교 한가운데 섬에 있는 휴게소는 어디일까요?',options:['금강휴게소','행담도휴게소','가평휴게소','횡성휴게소'],answer:1,explain:'행담도휴게소는 서해대교 가운데 있는 작은 섬 "행담도" 위에 있어요.'});
+  QUIZ.push({q:'고속도로에서는 보통 몇 시간마다 쉬어 가면 좋을까요?',options:['10분','2시간','6시간','안 쉬어도 돼요'],answer:1,explain:'2시간쯤 달리면 휴게소에서 쉬어야 운전하는 어른도 덜 피곤해요.'});}
+if(window.GLOSSARY)GLOSSARY.push({word:'휴게소',mean:'고속도로를 달리다가 잠깐 쉬고, 밥도 먹고, 화장실도 가는 곳'},{word:'고속도로',mean:'자동차만 빠르게 달릴 수 있도록 만든 넓은 길'});
+
+/* ---------- tips / glossary / quiz ---------- */
+$('#tipList').innerHTML=(window.WALK_TIPS||[]).map((t,i)=>'<div class="clay reveal"><div class="e" style="background:'+['var(--tint-forest)','var(--tint-gold)','var(--tint-sea)'][i%3]+'">'+t.emoji+'</div><h4>'+esc(t.title)+'</h4><p>'+esc(t.text)+'</p></div>').join('');
+$('#gloss').innerHTML=(window.GLOSSARY||[]).map(g=>'<div class="flip reveal"><div class="in"><div class="f">'+esc(g.word)+'</div><div class="b">'+esc(g.mean)+'</div></div></div>').join('');
+$('#gloss').addEventListener('click',e=>{const f=e.target.closest('.flip');if(f)f.classList.toggle('on')});
+const Q=window.QUIZ||[]; let qi=0, score=0;
+function drawQ(){const box=$('#quizBox');
+  if(qi>=Q.length){box.innerHTML='<div class="seal">'+score+' / '+Q.length+'<br>정답</div><div class="q">'+Q.length+'문제 중 '+score+'개 맞혔어요!</div><button class="pill on" id="qAgain">다시 풀기</button> <a class="pill" href="#finish">수료증 받으러 가기 ↓</a>';$('#qAgain').onclick=()=>{qi=0;score=0;drawQ()};return;}
+  const q=Q[qi];box.innerHTML='<div class="score">문제 '+(qi+1)+' / '+Q.length+' · 맞힌 개수 '+score+'</div><div class="q">'+esc(q.q)+'</div><div class="opts">'+q.options.map((o,i)=>'<button data-o="'+i+'">'+['①','②','③','④'][i]+' '+esc(o)+'</button>').join('')+'</div><div class="exp" id="qExp"></div>';
+  box.querySelector('.opts').onclick=e=>{const b=e.target.closest('[data-o]');if(!b||box.dataset.lock)return;box.dataset.lock=1;const ok=+b.dataset.o===q.answer;if(ok)score++;
+    b.classList.add(ok?'ok':'no');box.querySelectorAll('[data-o]')[q.answer].classList.add('ok');
+    $('#qExp').innerHTML=(ok?'⭕ 정답! ':'❌ 아쉬워요. ')+esc(q.explain)+'<br><button class="pill on" id="qNext" style="margin-top:10px">다음 문제 ▶</button>';
+    $('#qNext').onclick=()=>{delete box.dataset.lock;qi++;drawQ()};};}
+drawQ();
+
+/* ---------- scroll walker + reveal ---------- */
+function onScroll(){const h=document.documentElement;const p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  $('#wDone').style.width=(p*100)+'%';const me=$('#wMe');me.style.left=(p*100)+'%';
+  /* 첫 화면 산 능선이 스크롤에 따라 천천히 움직여요 */
+  const y=h.scrollTop;if(y<900){$('#ridgeBack').style.transform='translateY('+(y*.15)+'px)';$('#ridgeFront').style.transform='translateY('+(y*.3)+'px)';}}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));
+saveStamps();
+})();
+</script>
+</body>
+</html>
